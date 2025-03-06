@@ -1,2 +1,2 @@
-# manage-ecom
-Manage Multiple Ecommerce Platform
+# Django Template
+# A template to work efficiently
