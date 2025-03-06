@@ -11,7 +11,7 @@ class ChannelBaseSerializer(ModelSerializer):
             "uid",
             "name",
             "slug",
-            "company_uid",
+            "company",
             "channel_state",
             "channel_type",
             "shop_url",
@@ -22,7 +22,6 @@ class ChannelBaseSerializer(ModelSerializer):
             "id",
             "uid",
             "slug",
-            "company_uid",
         )
 
 

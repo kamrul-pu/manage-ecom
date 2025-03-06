@@ -1,17 +1,16 @@
 from django.db import models
+from django.contrib.auth import get_user_model
 
 from common.models import NameSlugDescriptionBaseModel
 from .choices import ChannelState
-import uuid
+
+
+User = get_user_model()
 
 
 class Channel(NameSlugDescriptionBaseModel):
-    company_uid = models.CharField(
-        max_length=64,
-        default=uuid.uuid4,
-        editable=False,
-        db_index=True,
-        unique=True,
+    company = models.ForeignKey(
+        User, related_name="company_channel", on_delete=models.CASCADE
     )
     channel_type = models.CharField(max_length=20)
     channel_state = models.CharField(
