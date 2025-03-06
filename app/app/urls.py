@@ -14,6 +14,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     # include user endpoints
     path("api/v1/users", include("core.urls.user"), name="user-urls"),
+    # include channel urls
+    path("api/v1/channels", include("channel.urls.channels"), name="channel-urls"),
 ]
 
 if settings.DEBUG:
