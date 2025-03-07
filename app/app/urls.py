@@ -18,6 +18,8 @@ urlpatterns = [
     path("api/v1/channels", include("channel.urls.channels"), name="channel-urls"),
     # include product urls
     path("api/v1/products", include("product.urls.base"), name="product-urls"),
+    # include order urls
+    path("api/v1/orders", include("order.urls.base"), name="order-urls"),
 ]
 
 if settings.DEBUG:

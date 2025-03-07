@@ -60,6 +60,8 @@ PROJECT_APPS = [
     "core",
     "common",
     "channel",
+    "inventory",
+    "order",
     "product",
 ]
 THIRD_PARTY_APPS = [

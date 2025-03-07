@@ -30,6 +30,13 @@ class RemoteProduct(NameSlugDescriptionBaseModel):  # Fixed naming
     local_product = models.ForeignKey(
         LocalProduct, related_name="remote_products", on_delete=models.CASCADE
     )
+    channel = models.ForeignKey(
+        "channel.Channel",
+        related_name="channel_remote_products",
+        on_delete=models.CASCADE,
+        blank=True,
+        null=True,
+    )
     sku = models.CharField(max_length=128)  # Added explicit SKU field
     image = models.URLField(
         max_length=2048, null=True, blank=True
