@@ -10,7 +10,7 @@ User = get_user_model()
 
 class Channel(NameSlugDescriptionBaseModel):
     company = models.ForeignKey(
-        User, related_name="company_channel", on_delete=models.CASCADE
+        User, related_name="company_channels", on_delete=models.CASCADE
     )
     channel_type = models.CharField(max_length=20)
     channel_state = models.CharField(
