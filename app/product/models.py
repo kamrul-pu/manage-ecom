@@ -25,6 +25,9 @@ class LocalProduct(NameSlugDescriptionBaseModel):
         unique_together = ["sku", "channel"]
         verbose_name_plural = "local_products"
 
+    def __str__(self):
+        return f"{self.name} {self.sku}"
+
 
 class RemoteProduct(NameSlugDescriptionBaseModel):  # Fixed naming
     local_product = models.ForeignKey(
@@ -47,3 +50,6 @@ class RemoteProduct(NameSlugDescriptionBaseModel):  # Fixed naming
     class Meta:
         unique_together = ["sku", "local_product"]  # Fixed unique_together
         verbose_name_plural = "remote_products"
+
+    def __str__(self):
+        return f"{self.name} {self.sku}"

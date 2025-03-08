@@ -31,3 +31,6 @@ class Channel(NameSlugDescriptionBaseModel):
 
     class Meta:
         verbose_name_plural = "Channels"
+
+    def __str__(self):
+        return f"{self.name} {self.country} {self.channel_type}"
