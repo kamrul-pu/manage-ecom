@@ -1,6 +1,6 @@
 from django.db import models
 from common.models import BaseModelWithUID
-from product.models import LocalProduct
+from product.models import Product
 
 
 class RequestStatus(models.TextChoices):
@@ -13,8 +13,8 @@ class RequestStatus(models.TextChoices):
 
 
 class Stock(BaseModelWithUID):
-    local_product = models.ForeignKey(
-        LocalProduct, on_delete=models.CASCADE, related_name="local_product_stock"
+    product = models.ForeignKey(
+        Product, on_delete=models.CASCADE, related_name="stocks"
     )
     stock_level = models.PositiveIntegerField(default=0)
     in_open = models.PositiveIntegerField(default=0)
@@ -34,11 +34,10 @@ class Stock(BaseModelWithUID):
         RETURN = "RETURN"
 
     def __str__(self):
-        return f"{self.pk} {self.local_product}"
+        return f"{self.pk} {self.product}"
 
 
-class InventoryRequestStock(BaseModelWithUID):
-
+class InventoryRequest(BaseModelWithUID):
     stock = models.ForeignKey(
         Stock, on_delete=models.CASCADE, related_name="inventory_requests"
     )

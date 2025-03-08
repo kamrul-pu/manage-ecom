@@ -1,16 +1,14 @@
 from django.urls import path
 
 from inventory.views.inventory_request import (
-    InventoryRequestStockList,
-    InventoryRequestStockDetail,
+    InventoryRequestList,
+    InventoryRequestDetail,
 )
 
 
 urlpatterns = [
-    path("", InventoryRequestStockList.as_view(), name="inventory-request-list"),
+    path("", InventoryRequestList.as_view(), name="inventory-request-list"),
     path(
-        "/<uuid:uid>",
-        InventoryRequestStockDetail.as_view(),
-        name="inventory-request-detail",
+        "/<uuid:uid>", InventoryRequestDetail.as_view(), name="inventory-request-detail"
     ),
 ]

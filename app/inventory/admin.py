@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from inventory.models import Stock, InventoryRequestStock
+from inventory.models import Stock, InventoryRequest
 
 # Register your models here.
 
@@ -16,7 +16,7 @@ class StockAdmin(admin.ModelAdmin):
 admin.site.register(Stock, StockAdmin)
 
 
-class InventoryRequestStockAdmin(admin.ModelAdmin):
+class InventoryRequestAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "dispatch_by",
@@ -24,4 +24,4 @@ class InventoryRequestStockAdmin(admin.ModelAdmin):
     )
 
 
-admin.site.register(InventoryRequestStock, InventoryRequestStockAdmin)
+admin.site.register(InventoryRequest, InventoryRequestAdmin)

@@ -1,10 +1,10 @@
 from rest_framework.serializers import ModelSerializer
-from product.models import LocalProduct
+from product.models import Product
 
 
-class LocalProductBase(ModelSerializer):
+class ProductBase(ModelSerializer):
     class Meta:
-        model = LocalProduct
+        model = Product
         fields = (
             "id",
             "uid",
@@ -29,20 +29,20 @@ class LocalProductBase(ModelSerializer):
         )
 
 
-class LocalProductListSerializer(LocalProductBase):
-    class Meta(LocalProductBase.Meta):
-        fields = LocalProductBase.Meta.fields + (
+class ProductListSerializer(ProductBase):
+    class Meta(ProductBase.Meta):
+        fields = ProductBase.Meta.fields + (
             "is_composite",
             "is_child",
             "stock_notification",
         )
-        read_only_fields = LocalProductBase.Meta.read_only_fields + ()
+        read_only_fields = ProductBase.Meta.read_only_fields + ()
 
 
-class LocalProductDetailSerializer(LocalProductListSerializer):
-    class Meta(LocalProductListSerializer.Meta):
-        fields = LocalProductListSerializer.Meta.fields + (
+class ProductDetailSerializer(ProductListSerializer):
+    class Meta(ProductListSerializer.Meta):
+        fields = ProductListSerializer.Meta.fields + (
             "created_at",
             "updated_at",
         )
-        read_only_fields = LocalProductListSerializer.Meta.read_only_fields + ()
+        read_only_fields = ProductListSerializer.Meta.read_only_fields + ()

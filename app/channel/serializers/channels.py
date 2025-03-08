@@ -1,9 +1,11 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
+
+from core.serializers.user import UserListSerializer
 
 from channel.models import Channel
 
 
-class ChannelBaseSerializer(ModelSerializer):
+class ChannelBaseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Channel
         fields = (
@@ -11,10 +13,11 @@ class ChannelBaseSerializer(ModelSerializer):
             "uid",
             "name",
             "slug",
-            "company",
+            "user",
             "channel_state",
             "channel_type",
             "shop_url",
+            "market_place",
             "country",
             "description",
         )
@@ -39,6 +42,8 @@ class ChannelListSerializer(ChannelBaseSerializer):
 
 
 class ChannelDetailSerializer(ChannelListSerializer):
+    user = UserListSerializer(read_only=True)
+
     class Meta(ChannelListSerializer.Meta):
         fields = ChannelListSerializer.Meta.fields + (
             "created_at",
