@@ -15,6 +15,6 @@ class ChannelList(ListCreateAPIView):
 
 class ChannelDetail(RetrieveUpdateDestroyAPIView):
     permission_classes = (AllowAny,)
-    queryset = Channel().get_all_actives()
+    queryset = Channel().get_all_actives().select_related("user")
     serializer_class = ChannelDetailSerializer
     lookup_field = "uid"
