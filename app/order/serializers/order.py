@@ -22,7 +22,6 @@ class OrderSerializer(serializers.ModelSerializer):
             "purchase_date",
             "currency",
             "total",
-            "company_uid",
             "market_place",
             "dispatch_status",
             "dispatch_identifier",
