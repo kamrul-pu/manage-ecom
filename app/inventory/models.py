@@ -34,11 +34,10 @@ class Stock(BaseModelWithUID):
         RETURN = "RETURN"
 
     def __str__(self):
-        return f"{self.pk} {self.local_product}"
+        return f"{self.pk} {self.product}"
 
 
 class InventoryRequest(BaseModelWithUID):
-
     stock = models.ForeignKey(
         Stock, on_delete=models.CASCADE, related_name="inventory_requests"
     )

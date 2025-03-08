@@ -1,18 +1,31 @@
 from rest_framework import serializers
 from inventory.models import Stock
+from product.serializers.product import ProductBase
 
 
-class StockSerializer(serializers.ModelSerializer):
+class StockListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Stock
-        fields = [
-            "id",  # From BaseModelWithUID
-            "local_product",
+        fields = (
+            "id",
+            "uid",
+            "product",
             "stock_level",
             "in_open",
             "minimum_quantity",
             "location",
-            "created_at",  # From BaseModelWithUID
-            "updated_at",  # From BaseModelWithUID
-        ]
-        read_only_fields = ["id", "created_at", "updated_at"]
+        )
+        read_only_fields = (
+            "id",
+            "uid",
+        )
+
+
+class StockDetailSerializer(StockListSerializer):
+    product = ProductBase(read_only=True)
+
+    class Meta(StockListSerializer.Meta):
+        fields = StockListSerializer.Meta.fields + (
+            "created_at",
+            "updated_at",
+        )
