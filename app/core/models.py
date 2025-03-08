@@ -32,7 +32,7 @@ class UserManager(BaseUserManager):
             first_name=first_name,
             last_name=last_name,
             email=self.normalize_email(email),
-            **extra_fields
+            **extra_fields,
         )
         user.set_password(password)
         user.save(using=self._db)
@@ -120,3 +120,6 @@ class User(AbstractBaseUser, BaseModelWithUID, PermissionsMixin):
     class Meta:
         verbose_name = "System User"
         verbose_name_plural = "System Users"
+
+    def __str__(self):
+        return f"{self.first_name} {self.email}"

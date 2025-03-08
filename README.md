@@ -1,2 +1,1 @@
-# Django Template
-# A template to work efficiently
+# Manage Multi platform Ecommerce
