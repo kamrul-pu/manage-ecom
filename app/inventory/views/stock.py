@@ -1,7 +1,7 @@
 # views.py
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
-from inventory.models import Stock, InventoryRequestStock
+from inventory.models import Stock
 from inventory.serializers.stock import StockSerializer
 
 

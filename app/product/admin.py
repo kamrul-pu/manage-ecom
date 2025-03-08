@@ -1,11 +1,11 @@
 from django.contrib import admin
 
-from product.models import LocalProduct, RemoteProduct
+from product.models import Product
 
 # Register your models here.
 
 
-class LocalProductAdmin(admin.ModelAdmin):
+class ProductAdmin(admin.ModelAdmin):
     list_display = (
         "id",
         "uid",
@@ -15,17 +15,4 @@ class LocalProductAdmin(admin.ModelAdmin):
     )
 
 
-admin.site.register(LocalProduct, LocalProductAdmin)
-
-
-class RemoteProductAdmin(admin.ModelAdmin):
-    list_display = (
-        "id",
-        "uid",
-        "name",
-        "slug",
-        "sku",
-    )
-
-
-admin.site.register(RemoteProduct, RemoteProductAdmin)
+admin.site.register(Product, ProductAdmin)

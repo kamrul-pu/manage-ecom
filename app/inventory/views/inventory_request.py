@@ -1,19 +1,19 @@
 from rest_framework import generics
 from rest_framework.permissions import AllowAny
 
-from inventory.models import InventoryRequestStock
-from inventory.serializers.inventory_request import InventoryRequestStockSerializer
+from inventory.models import InventoryRequest
+from inventory.serializers.inventory_request import InventoryRequestSerializer
 
 
 # InventoryRequestStock Views
-class InventoryRequestStockList(generics.ListCreateAPIView):
-    queryset = InventoryRequestStock().get_all_actives()
-    serializer_class = InventoryRequestStockSerializer
+class InventoryRequestList(generics.ListCreateAPIView):
+    queryset = InventoryRequest().get_all_actives()
+    serializer_class = InventoryRequestSerializer
     permission_classes = (AllowAny,)
 
 
-class InventoryRequestStockDetail(generics.RetrieveUpdateDestroyAPIView):
-    queryset = InventoryRequestStock().get_all_actives()
-    serializer_class = InventoryRequestStockSerializer
+class InventoryRequestDetail(generics.RetrieveUpdateDestroyAPIView):
+    queryset = InventoryRequest().get_all_actives()
+    serializer_class = InventoryRequestSerializer
     permission_classes = (AllowAny,)
     lookup_field = "uid"

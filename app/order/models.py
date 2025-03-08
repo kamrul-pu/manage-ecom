@@ -42,9 +42,6 @@ class Order(BaseModelWithUID):
     total = models.DecimalField(
         max_digits=12, decimal_places=2, default=0.00, help_text="Total order amount."
     )
-    company_uid = models.CharField(
-        max_length=36, db_index=True, help_text="Unique identifier for the company."
-    )
     market_place = models.CharField(
         max_length=50,
         blank=True,
@@ -87,22 +84,18 @@ class Order(BaseModelWithUID):
 
     class Meta:
         indexes = [
-            models.Index(fields=["channel_order_id", "company_uid"]),
+            models.Index(fields=["channel_order_id", "channel_id"]),
         ]
         verbose_name = "Order"
         verbose_name_plural = "Orders"
 
     def get_order_items_sku_list(self):
         """Return a list of remote SKUs for order items."""
-        return list(self.order_items.values_list("remote_sku", flat=True))
+        return list(self.order_items.values_list("sku", flat=True))
 
     def get_order_item_sku_quantity(self):
         """Return a list of dictionaries with SKU, quantity, and UIDs."""
-        return list(
-            self.order_items.values(
-                "remote_sku", "quantity", "channel_uid", "company_uid"
-            )
-        )
+        return list(self.order_items.values("sku", "quantity", "channel"))
 
 
 class OrderItem(BaseModelWithUID):
@@ -112,11 +105,8 @@ class OrderItem(BaseModelWithUID):
         related_name="order_items",
         help_text="The order this item belongs to.",
     )
-    remote_sku = models.CharField(
-        max_length=128, blank=True, null=True, help_text="SKU from the remote channel."
-    )
-    local_sku = models.CharField(
-        max_length=128, blank=True, null=True, help_text="Local SKU if mapped."
+    sku = models.CharField(
+        max_length=128, blank=True, null=True, help_text="SKU from the channel."
     )
     quantity = models.PositiveIntegerField(
         default=1, help_text="Number of items ordered."
@@ -130,12 +120,6 @@ class OrderItem(BaseModelWithUID):
         default=0.00,
         help_text="Total price for this item (price * quantity).",
     )
-    # channel_uid = models.CharField(
-    #     max_length=36, help_text="Unique identifier for the channel."
-    # )
-    # company_uid = models.CharField(
-    #     max_length=36, help_text="Unique identifier for the company."
-    # )
     position_item_ids = models.JSONField(
         blank=True,
         null=True,
@@ -143,7 +127,7 @@ class OrderItem(BaseModelWithUID):
         help_text="List of position item IDs (replaced ArrayField for portability).",
     )
     picked_sku = models.CharField(
-        max_length=128, blank=True, null=True, help_text="SKU of the picked item."
+        max_length=128, blank=True, help_text="SKU of the picked item."
     )
     picked_at = models.DateTimeField(
         blank=True, null=True, help_text="Date and time the item was picked."
@@ -155,11 +139,10 @@ class OrderItem(BaseModelWithUID):
             ("EXCHANGE_ITEM", "Exchange Item"),
         ],
         blank=True,
-        null=True,
         help_text="Type of picked item.",
     )
     packed_sku = models.CharField(
-        max_length=128, blank=True, null=True, help_text="SKU of the packed item."
+        max_length=128, blank=True, help_text="SKU of the packed item."
     )
     packed_at = models.DateTimeField(
         blank=True, null=True, help_text="Date and time the item was packed."
@@ -167,7 +150,7 @@ class OrderItem(BaseModelWithUID):
 
     class Meta:
         indexes = [
-            models.Index(fields=["remote_sku", "local_sku"]),
+            models.Index(fields=["sku", "order_id"]),
             # models.Index(fields=["channel_uid", "company_uid"]),
         ]
         verbose_name = "Order Item"

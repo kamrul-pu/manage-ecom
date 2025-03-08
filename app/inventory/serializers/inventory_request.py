@@ -1,18 +1,18 @@
 from rest_framework import serializers
-from inventory.models import InventoryRequestStock, Stock
+from inventory.models import InventoryRequest, Stock
 
 
 from inventory.serializers.stock import StockSerializer
 
 
-class InventoryRequestStockSerializer(serializers.ModelSerializer):
+class InventoryRequestSerializer(serializers.ModelSerializer):
     stock = StockSerializer(read_only=True)
     stock_id = serializers.PrimaryKeyRelatedField(
         queryset=Stock.objects.filter(), source="stock", write_only=True
     )
 
     class Meta:
-        model = InventoryRequestStock
+        model = InventoryRequest
         fields = [
             "id",  # From BaseModelWithUID
             "stock",
