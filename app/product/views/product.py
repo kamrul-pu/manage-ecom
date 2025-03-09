@@ -17,7 +17,7 @@ class ProductList(ListCreateAPIView):
 
 
 class ProductDetail(RetrieveUpdateDestroyAPIView):
-    queryset = Product().get_all_actives()
+    queryset = Product().get_all_actives().select_related("channel")
     serializer_class = ProductDetailSerializer
     permission_classes = (AllowAny,)
     lookup_field = "uid"

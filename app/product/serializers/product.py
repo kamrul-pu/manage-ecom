@@ -1,5 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from product.models import Product
+from channel.serializers.channels import ChannelBaseSerializer
 
 
 class ProductBase(ModelSerializer):
@@ -40,6 +41,8 @@ class ProductListSerializer(ProductBase):
 
 
 class ProductDetailSerializer(ProductListSerializer):
+    channel = ChannelBaseSerializer(required=False)
+
     class Meta(ProductListSerializer.Meta):
         fields = ProductListSerializer.Meta.fields + (
             "created_at",
