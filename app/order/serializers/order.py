@@ -1,3 +1,5 @@
+from decimal import Decimal
+
 from django.utils import timezone
 from rest_framework import serializers
 from django.db import transaction
@@ -35,21 +37,28 @@ class OrderSerializer(serializers.ModelSerializer):
         read_only_fields = ("uid", "total")
 
     def create(self, validated_data):
-        """Handle nested creation with bulk operations."""
+        """Handle nested creation with bulk operations and total calculation."""
         order_items_data = validated_data.pop("order_items", [])
         shipping_address_data = validated_data.pop("shipping_address", None)
 
         with transaction.atomic():  # Wrap operations in a transaction
-            # Create the order
+            # Create the order without total initially
             order = Order.objects.create(**validated_data)
 
-            # Bulk create order items if any
+            # Bulk create order items if any and calculate total
+            total = Decimal("0.00")
             if order_items_data:
-                order_items = [
-                    OrderItem(order=order, **item_data)
-                    for item_data in order_items_data
-                ]
+                order_items = []
+                for item_data in order_items_data:
+                    total_amount = item_data["price"] * item_data["quantity"]
+                    item_data["total_amount"] = total_amount
+                    order_items.append(OrderItem(order=order, **item_data))
+                    total += total_amount
                 OrderItem.objects.bulk_create(order_items)
+
+            # Set and save the total on the order
+            order.total = total
+            order.save()
 
             # Create shipping address if provided
             if shipping_address_data:
@@ -60,26 +69,32 @@ class OrderSerializer(serializers.ModelSerializer):
         return order
 
     def update(self, instance, validated_data):
-        """Handle nested updates with bulk operations."""
+        """Handle nested updates with bulk operations and total recalculation."""
         order_items_data = validated_data.pop("order_items", None)
         shipping_address_data = validated_data.pop("shipping_address", None)
 
         with transaction.atomic():  # Wrap operations in a transaction
-            # Update order fields
+            # Update order fields (excluding total)
             for attr, value in validated_data.items():
                 setattr(instance, attr, value)
             instance.save()
 
-            # Update or create order items
+            # Update or create order items and recalculate total
+            total = Decimal("0.00")
             if order_items_data is not None:
                 # Delete existing items
                 instance.order_items.all().delete()
                 # Bulk create new items
-                order_items = [
-                    OrderItem(order=instance, **item_data)
-                    for item_data in order_items_data
-                ]
+                order_items = []
+                for item_data in order_items_data:
+                    total_amount = item_data["price"] * item_data["quantity"]
+                    item_data["total_amount"] = total_amount
+                    order_items.append(OrderItem(order=instance, **item_data))
+                    total += total_amount
                 OrderItem.objects.bulk_create(order_items)
+                # Update total
+                instance.total = total
+                instance.save()
 
             # Update or create shipping address
             if shipping_address_data is not None:
