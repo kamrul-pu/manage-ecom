@@ -1,12 +1,14 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from order.models import Order
-from order.serializers.order import OrderListSerializer, OrderDetailSerializer
+from order.serializers.order import OrderSerializer
 
 
 class OrderList(generics.ListCreateAPIView):
-    queryset = Order().get_all_actives()
-    serializer_class = OrderListSerializer
+    queryset = (
+        Order().get_all_actives().prefetch_related("order_items", "shipping_address")
+    )
+    serializer_class = OrderSerializer
     permission_classes = (AllowAny,)
     lookup_field = "uid"
 
@@ -15,7 +17,7 @@ class OrderDetail(generics.RetrieveUpdateDestroyAPIView):
     queryset = (
         Order().get_all_actives().prefetch_related("order_items", "shipping_address")
     )
-    serializer_class = OrderDetailSerializer
+    serializer_class = OrderSerializer
     permission_classes = (AllowAny,)
     lookup_field = "uid"
 
