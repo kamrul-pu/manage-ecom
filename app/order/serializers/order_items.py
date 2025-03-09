@@ -7,8 +7,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         model = OrderItem
         fields = (
             "uid",
-            "remote_sku",
-            "local_sku",
+            "sku",
             "quantity",
             "price",
             "total_amount",

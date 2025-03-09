@@ -7,10 +7,7 @@ from order.serializers.order_items import OrderItemSerializer
 from order.serializers.shipping_address import OrderShippingAddressSerializer
 
 
-class OrderSerializer(serializers.ModelSerializer):
-    order_items = OrderItemSerializer(many=True, required=False)
-    shipping_address = OrderShippingAddressSerializer(required=False)
-
+class OrderListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = (
@@ -29,8 +26,6 @@ class OrderSerializer(serializers.ModelSerializer):
             "dispatched_at",
             "shipped_at",
             "order_meta",
-            "order_items",
-            "shipping_address",
         )
         read_only_fields = ("uid", "total")
 
@@ -58,6 +53,24 @@ class OrderSerializer(serializers.ModelSerializer):
                 )
 
         return order
+
+    def validate_purchase_date(self, value):
+        """Ensure purchase_date is not in the future."""
+        if value > timezone.now():
+            raise serializers.ValidationError("Purchase date cannot be in the future.")
+        return value
+
+
+class OrderDetailSerializer(OrderListSerializer):
+    order_items = OrderItemSerializer(many=True, required=False)
+    shipping_address = OrderShippingAddressSerializer(required=False)
+
+    class Meta(OrderListSerializer.Meta):
+        fields = OrderListSerializer.Meta.fields + (
+            "order_items",
+            "shipping_address",
+        )
+        read_only_fields = OrderListSerializer.Meta.read_only_fields + ()
 
     def update(self, instance, validated_data):
         """Handle nested updates with bulk operations."""
@@ -93,9 +106,3 @@ class OrderSerializer(serializers.ModelSerializer):
                     )
 
         return instance
-
-    def validate_purchase_date(self, value):
-        """Ensure purchase_date is not in the future."""
-        if value > timezone.now():
-            raise serializers.ValidationError("Purchase date cannot be in the future.")
-        return value
