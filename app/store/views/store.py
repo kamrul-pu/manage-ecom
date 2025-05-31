@@ -1,3 +1,4 @@
+from rest_framework.response import Response
 from rest_framework import status
 from rest_framework.generics import (
     ListCreateAPIView,
@@ -27,7 +28,7 @@ class StoreDetail(RetrieveUpdateDestroyAPIView):
     lookup_field = "uid"
 
 
-class StoreWareHouseList(ListAPIView):
+class StoreWareHouseList(ListCreateAPIView):
     permission_classes = (AllowAny,)
     serializer_class = WarehouseListSerializer
 
@@ -41,3 +42,17 @@ class StoreWareHouseList(ListAPIView):
             return Warehouse.objects.none()
         queryset = Warehouse.objects.filter(store_id=store.id)
         return queryset
+
+    def perform_create(self, serializer):
+        uid = self.kwargs.get("uid")
+        if not uid:
+            return Response(
+                {"detail": "Store UID is required."}, status=status.HTTP_400_BAD_REQUEST
+            )
+        try:
+            store = Store.objects.get(uid=uid)
+        except Store.DoesNotExist:
+            return Response(
+                {"detail": "Store not found."}, status=status.HTTP_404_NOT_FOUND
+            )
+        serializer.save(store=store)
