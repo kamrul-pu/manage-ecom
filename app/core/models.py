@@ -12,7 +12,7 @@ from django.contrib.auth.models import (
 from django.db import models
 
 
-from common.models import BaseModelWithUID
+from common.models import BaseModelWithUID, NameSlugDescriptionBaseModel
 
 from core.choices import (
     UserKind,
@@ -57,8 +57,51 @@ class UserManager(BaseUserManager):
         return user
 
 
+class Organization(NameSlugDescriptionBaseModel):
+    email = models.EmailField(
+        max_length=255,
+        unique=True,
+        blank=True,
+        null=True,
+        db_index=True,
+    )
+    location = models.CharField(
+        max_length=255,
+        blank=True,
+        null=True,
+        db_index=True,
+    )
+    logo = models.ImageField(
+        "Logo",
+        upload_to="organizations/logo",
+        blank=True,
+        null=True,
+    )
+    subscription = models.BooleanField(
+        default=False,
+        help_text="Indicates if the organization has a subscription.",
+    )
+    expiration_date = models.DateTimeField(
+        "Subscription Expiration Date",
+        blank=True,
+        null=True,
+        help_text="The date when the subscription expires.",
+    )
+
+    def __str__(self):
+        return f"{self.name} ({self.slug})"
+
+
 class User(AbstractBaseUser, BaseModelWithUID, PermissionsMixin):
     """Users in the System"""
+
+    organization = models.ForeignKey(
+        Organization,
+        on_delete=models.SET_NULL,
+        related_name="users",
+        blank=True,
+        null=True,
+    )
 
     email = models.EmailField(
         max_length=255,
@@ -92,7 +135,7 @@ class User(AbstractBaseUser, BaseModelWithUID, PermissionsMixin):
         default=UserGender.UNKNOWN,
     )
     image = models.ImageField(
-        "images",
+        "Profile Image",
         upload_to="images",
         blank=True,
         null=True,

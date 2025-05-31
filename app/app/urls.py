@@ -14,16 +14,24 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     # include user endpoints
     path("api/v1/users", include("core.urls.user"), name="user-urls"),
-    # include channel urls
-    path("api/v1/channels", include("channel.urls.channels"), name="channel-urls"),
-    # include product urls
-    path("api/v1/products", include("product.urls.base"), name="product-urls"),
-    # include order urls
-    path("api/v1/orders", include("order.urls.base"), name="order-urls"),
-    # include inventory urls
+    # include organization endpoints
     path(
-        "api/v1/inventory", include("inventory.urls.base"), name="inventory-base-urls"
+        "api/v1/organizations",
+        include("core.urls.organization"),
+        name="organization-urls",
     ),
+    # include store urls
+    path("api/v1/stores", include("store.urls.store"), name="store-related-urls"),
+    # include warehouse urls
+    path("api/v1/warehouses", include("store.urls.warehouse"), name="warehouse-urls"),
+    # include product urls
+    # path("api/v1/products", include("product.urls.base"), name="product-urls"),
+    # include order urls
+    # path("api/v1/orders", include("order.urls.base"), name="order-urls"),
+    # include inventory urls
+    # path(
+    #     "api/v1/inventory", include("inventory.urls.base"), name="inventory-base-urls"
+    # ),
 ]
 
 if settings.DEBUG:

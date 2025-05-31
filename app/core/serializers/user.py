@@ -6,6 +6,7 @@ from rest_framework import status
 from rest_framework import serializers
 
 from core.token_authentication import JWTAuthentication
+from core.serializers.organization import OrganizationBase
 
 User = get_user_model()
 
@@ -16,6 +17,7 @@ class UserListSerializer(serializers.ModelSerializer):
         fields = (
             "id",
             "uid",
+            "organization",
             "first_name",
             "last_name",
             "email",
@@ -27,6 +29,8 @@ class UserListSerializer(serializers.ModelSerializer):
 
 
 class UserDetailSerializer(UserListSerializer):
+    organization = OrganizationBase(read_only=True)
+
     class Meta(UserListSerializer.Meta):
         fields = UserListSerializer.Meta.fields + (
             "status",

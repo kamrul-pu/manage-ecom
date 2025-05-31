@@ -49,6 +49,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 DJANGO_APPS = [
+    "unfold",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -56,14 +57,16 @@ DJANGO_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 ]
+
 PROJECT_APPS = [
     "core",
     "common",
-    "channel",
-    "inventory",
-    "order",
-    "product",
+    # "inventory",
+    # "order",
+    # "product",
+    "store",
 ]
+
 THIRD_PARTY_APPS = [
     "corsheaders",
     # "django_filters",
