@@ -8,19 +8,6 @@ class AuthType(TextChoices):
     TOKEN = "TOKEN", "Token"
 
 
-class MarketPlace(TextChoices):
-    AMAZON = "AMAZON", "Amazon"
-    BIG_COMMERCE = "BIG_COMMERCE", "BigCommerce"
-    EBAY = "EBAY", "eBay"
-    OTTO = "OTTO", "Otto"
-    SHEIN = "SHEIN", "Shein"
-    SHOPIFY = "SHOPIFY", "Shopify"
-    TEMU = "TEMU", "Temu"
-    TIKTOK_SHOP = "TIKTOK_SHOP", "TikTok Shop"
-    WOOCOMMERCE = "WOOCOMMERCE", "WooCommerce"
-    OTHER = "OTHER", "Other"
-
-
 class StoreStatus(TextChoices):
     # Create your models here.
     ACTIVE = "ACTIVE", "Active"

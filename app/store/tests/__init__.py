@@ -4,7 +4,8 @@ from faker import Faker
 
 from store.models import Store, Warehouse
 from core.models import Organization
-from store.choices import AuthType, MarketPlace, StoreStatus
+from common.choices import MarketPlace
+from store.choices import AuthType, StoreStatus
 
 from core.tests import OrganizationFactory  # assumes you have this already
 

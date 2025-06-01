@@ -1,6 +1,6 @@
 from rest_framework.serializers import ModelSerializer
 from product.models import Product
-from channel.serializers.channels import ChannelBaseSerializer
+from core.serializers.organization import OrganizationBase
 
 
 class ProductBase(ModelSerializer):
@@ -10,13 +10,17 @@ class ProductBase(ModelSerializer):
             "id",
             "uid",
             "name",
-            "channel",
             "slug",
+            "organization",  # changed from "channel" to "store"
             "sku",
             "barcode",
             "description",
             "selling_price",
+            "selling_currency",
             "purchase_price",
+            "purchase_currency",
+            "style",
+            "color",
             "image",
             "width",
             "height",
@@ -36,12 +40,13 @@ class ProductListSerializer(ProductBase):
             "is_composite",
             "is_child",
             "stock_notification",
+            "metadata",
         )
         read_only_fields = ProductBase.Meta.read_only_fields + ()
 
 
 class ProductDetailSerializer(ProductListSerializer):
-    channel = ChannelBaseSerializer(required=False)
+    organization = OrganizationBase(required=False)  # updated field
 
     class Meta(ProductListSerializer.Meta):
         fields = ProductListSerializer.Meta.fields + (

@@ -25,7 +25,7 @@ urlpatterns = [
     # include warehouse urls
     path("api/v1/warehouses", include("store.urls.warehouse"), name="warehouse-urls"),
     # include product urls
-    # path("api/v1/products", include("product.urls.base"), name="product-urls"),
+    path("api/v1/products", include("product.urls.base"), name="product-urls"),
     # include order urls
     # path("api/v1/orders", include("order.urls.base"), name="order-urls"),
     # include inventory urls
