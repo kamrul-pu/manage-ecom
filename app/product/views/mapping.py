@@ -9,7 +9,11 @@ from product.serializers.mapping import (
 
 
 class MappingList(ListCreateAPIView):
-    queryset = Mapping().get_all_actives()
+    queryset = (
+        Mapping()
+        .get_all_actives()
+        .select_related("product", "marketplace_product", "store")
+    )
     serializer_class = MappingListSerializer
     permission_classes = (AllowAny,)
 

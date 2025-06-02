@@ -61,7 +61,7 @@ DJANGO_APPS = [
 PROJECT_APPS = [
     "core",
     "common",
-    # "inventory",
+    "inventory",
     # "order",
     "product",
     "store",
