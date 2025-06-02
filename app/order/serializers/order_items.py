@@ -8,6 +8,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         fields = (
             "uid",
             "sku",
+            "local_sku",
             "quantity",
             "price",
             "total_amount",
@@ -26,6 +27,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         quantity = attrs.get(
             "quantity", self.instance.quantity if self.instance else None
         )
+
         if price is not None and price < 0:
             raise serializers.ValidationError("Price cannot be negative.")
         if quantity is not None and quantity < 0:

@@ -1,32 +1,32 @@
 import os
 import sys
-
-from decimal import Decimal
-
-from typing import List, Dict
-import pika
 import json
+from decimal import Decimal
+from typing import List
 
+import pika
 
-# Dynamically add the parent directory to sys.path
+# Django setup
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), "..")))
-os.environ.setdefault(
-    "DJANGO_SETTINGS_MODULE", "app.settings"
-)  # Module path, not filesystem path
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "app.settings")
 import django
 
 django.setup()
-from order.models import Order, OrderItem, OrderShippingAddress
-from order.serializers.order import OrderSerializer
+
+from order.models import Order, OrderItem, ShippingAddress
+from product.models import Product, MarketplaceProduct, Mapping
+from store.models import Store
 
 
-# Rest of your code...
 def main():
     try:
         credentials = pika.PlainCredentials("kamrul", "kamrul")
         connection = pika.BlockingConnection(
             pika.ConnectionParameters(
-                host="localhost", port=5674, credentials=credentials, virtual_host="/"
+                host="localhost",
+                port=5674,
+                credentials=credentials,
+                virtual_host="/",
             )
         )
         channel = connection.channel()
@@ -36,80 +36,105 @@ def main():
             try:
                 order_data = json.loads(body)
 
-                # Create the Order object
-                # Channel id hardcoded to 4 for now
-                order: Order = Order(
-                    channel_id=4,
-                    channel_order_id=order_data.get("channel_order_id", ""),
+                store_uid = order_data.get("store_uid")
+                if not store_uid:
+                    raise ValueError("Missing store ID in order data")
+
+                store = Store.objects.get(id=store_uid)
+
+                order = Order.objects.create(
+                    store=store,
+                    marketplace_order_id=order_data.get("marketplace_order_id", ""),
                     payment_status=order_data.get("payment_status", "PENDING").upper(),
                     payment_method=order_data.get("payment_method", ""),
-                    purchase_date=order_data.get("purchase_date", None),
-                    currency=order_data.get("currency", ""),
-                    market_place=order_data.get("market_place", ""),
+                    purchase_date=order_data.get("purchase_date"),
+                    currency=order_data.get("currency", "USD"),
+                    total=Decimal(
+                        order_data.get("order_meta", {}).get("subtotal_price", "0.00")
+                    ),
+                    marketplace=order_data.get("marketplace", "other"),
                     dispatch_status=order_data.get(
-                        "dispatch_status", "PENDING"
+                        "dispatch_status", "OPEN_ORDER"
                     ).upper(),
                     dispatch_identifier=order_data.get("dispatch_identifier", ""),
                     dispatched_by=order_data.get("dispatched_by", ""),
-                    dispatched_at=order_data.get("dispatched_at", None),
-                    shipped_at=order_data.get("shipped_at", None),
-                    total=Decimal(
-                        order_data.get("order_meta", {}).get(
-                            "subtotal_price", Decimal("0.0")
-                        )
-                    ),
+                    dispatched_at=order_data.get("dispatched_at"),
+                    shipped_at=order_data.get("shipped_at"),
                     order_meta=order_data.get("order_meta", {}),
                 )
-                order.save()
-                print(f"Order {order.channel_order_id} saved to database")
+                print(f"Order {order.marketplace_order_id} created.")
 
-                # Prepare list of OrderItem objects for bulk create
-                order_items: List[OrderItem] = [
-                    OrderItem(
-                        order=order,
-                        sku=item_data.get("sku", ""),
-                        quantity=item_data.get("quantity", 1),
-                        price=Decimal(item_data.get("price", Decimal("0.0"))),
-                        total_amount=item_data.get("quantity", 1)
-                        * Decimal(item_data.get("price", Decimal("0.0"))),
-                        position_item_ids=item_data.get("product_id", []),
+                # === Order Items & Local SKU Mapping ===
+                order_items_data = order_data.get("order_items", [])
+                remote_skus = [item["remote_sku"] for item in order_items_data]
+
+                marketplace_products = MarketplaceProduct.objects.filter(
+                    sku__in=remote_skus,
+                    store=store,
+                )
+                sku_to_marketplace_product = {mp.sku: mp for mp in marketplace_products}
+
+                mappings = Mapping.objects.filter(
+                    marketplace_product__in=marketplace_products,
+                    store=store,
+                ).select_related("product", "marketplace_product")
+
+                remote_sku_to_local_sku = {
+                    m.marketplace_product.sku: m.product.sku for m in mappings
+                }
+
+                order_items: List[OrderItem] = []
+                for item_data in order_items_data:
+                    remote_sku = item_data.get("remote_sku")
+                    local_sku = remote_sku_to_local_sku.get(remote_sku, "")
+
+                    order_items.append(
+                        OrderItem(
+                            order=order,
+                            sku=remote_sku,
+                            local_sku=local_sku,
+                            quantity=item_data.get("quantity", 1),
+                            price=Decimal(item_data.get("price", "0.00")),
+                            total_amount=Decimal(item_data.get("price", "0.00"))
+                            * item_data.get("quantity", 1),
+                        )
                     )
-                    for item_data in order_data.get("order_items", [])
-                ]
+
                 if order_items:
                     OrderItem.objects.bulk_create(order_items)
-                    print(
-                        f"Bulk created {len(order_items)} OrderItems for order {order.channel_order_id}"
-                    )
+                    print(f"Created {len(order_items)} OrderItems.")
                 else:
-                    print(
-                        f"No Orderitems to create for order {order.channel_order_id}!!!"
-                    )
+                    print("No order items found in the message.")
 
-                shipping_address = OrderShippingAddress(
-                    order_id=order.id, **order_data.get("shipping_address", {})
-                )
-                shipping_address.save()
-                if shipping_address:
-                    print(
-                        f"Shipping address created for order: {order.channel_order_id}"
+                # === Shipping Address ===
+                shipping_data = order_data.get("shipping_address", {})
+                if shipping_data:
+                    ShippingAddress.objects.create(
+                        order=order,
+                        buyer_name=shipping_data.get("buyer_name", ""),
+                        address1=shipping_data.get("address1", ""),
+                        address2=shipping_data.get("address2", ""),
+                        city=shipping_data.get("city", ""),
+                        state=shipping_data.get("state", ""),
+                        post_code=shipping_data.get("post_code", ""),
+                        country=shipping_data.get("country", ""),
+                        phone=shipping_data.get("phone", ""),
+                        reference_id=shipping_data.get("reference_id"),
+                        email=shipping_data.get("email", ""),
                     )
+                    print("Shipping address saved.")
                 else:
-                    print(
-                        f"Failed to create shipping address for order: {order.channel_order_id}"
-                    )
+                    print("No shipping address found in the message.")
 
                 ch.basic_ack(delivery_tag=method.delivery_tag)
-            except json.JSONDecodeError as e:
-                print(f"Failed to decode message: {e}", file=sys.stderr)
-                ch.basic_nack(delivery_tag=method.delivery_tag, requeue=False)
+
             except Exception as e:
-                print(f"Error processing order: {e}", file=sys.stderr)
+                print(f"Error processing message: {e}", file=sys.stderr)
                 ch.basic_nack(delivery_tag=method.delivery_tag, requeue=False)
 
         channel.basic_qos(prefetch_count=1)
         channel.basic_consume(queue="order_queue", on_message_callback=callback)
-        print("Starting consumer... Press CTRL+C to exit")
+        print(" [*] Waiting for messages. Press CTRL+C to exit.")
         channel.start_consuming()
 
     except pika.exceptions.AMQPConnectionError as e:

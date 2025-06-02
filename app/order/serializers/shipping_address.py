@@ -1,10 +1,11 @@
 from rest_framework import serializers
-from order.models import OrderShippingAddress
+
+from order.models import ShippingAddress
 
 
-class OrderShippingAddressSerializer(serializers.ModelSerializer):
+class ShippingAddressSerializer(serializers.ModelSerializer):
     class Meta:
-        model = OrderShippingAddress
+        model = ShippingAddress
         fields = (
             "uid",
             "buyer_name",

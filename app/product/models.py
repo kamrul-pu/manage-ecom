@@ -40,7 +40,12 @@ class MarketplaceProduct(NameSlugDescriptionBaseModel):
         "store.Store", related_name="marketplace_products", on_delete=models.CASCADE
     )
     marketplace_id = models.CharField(max_length=128, blank=True, db_index=True)
-    marketplace = models.CharField(max_length=128, blank=True)
+    marketplace = models.CharField(
+        max_length=128,
+        choices=MarketPlace.choices,
+        default=MarketPlace.OTHER,
+        blank=True,
+    )
     sku = models.CharField(max_length=128, blank=True, db_index=True)
     category = models.TextField(max_length=512, blank=True, null=True)
     image = models.URLField(max_length=2048, null=True, blank=True)

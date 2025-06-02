@@ -1,30 +1,29 @@
 from decimal import Decimal
-
 from django.utils import timezone
-from rest_framework import serializers
 from django.db import transaction
+from rest_framework import serializers
 
-from order.models import Order, OrderItem, OrderShippingAddress
+from order.models import Order, OrderItem, ShippingAddress
 from order.serializers.order_items import OrderItemSerializer
-from order.serializers.shipping_address import OrderShippingAddressSerializer
+from order.serializers.shipping_address import ShippingAddressSerializer
 
 
 class OrderSerializer(serializers.ModelSerializer):
     order_items = OrderItemSerializer(many=True, required=False)
-    shipping_address = OrderShippingAddressSerializer(required=False)
+    shipping_address = ShippingAddressSerializer(required=False)
 
     class Meta:
         model = Order
         fields = (
             "uid",
-            "channel",
-            "channel_order_id",
+            "store",
+            "marketplace_order_id",
             "payment_status",
             "payment_method",
             "purchase_date",
             "currency",
             "total",
-            "market_place",
+            "marketplace",
             "dispatch_status",
             "dispatch_identifier",
             "dispatched_by",
@@ -37,15 +36,12 @@ class OrderSerializer(serializers.ModelSerializer):
         read_only_fields = ("uid", "total")
 
     def create(self, validated_data):
-        """Handle nested creation with bulk operations and total calculation."""
         order_items_data = validated_data.pop("order_items", [])
         shipping_address_data = validated_data.pop("shipping_address", None)
 
-        with transaction.atomic():  # Wrap operations in a transaction
-            # Create the order without total initially
+        with transaction.atomic():
             order = Order.objects.create(**validated_data)
 
-            # Bulk create order items if any and calculate total
             total = Decimal("0.00")
             if order_items_data:
                 order_items = []
@@ -56,35 +52,26 @@ class OrderSerializer(serializers.ModelSerializer):
                     total += total_amount
                 OrderItem.objects.bulk_create(order_items)
 
-            # Set and save the total on the order
             order.total = total
             order.save()
 
-            # Create shipping address if provided
             if shipping_address_data:
-                OrderShippingAddress.objects.create(
-                    order=order, **shipping_address_data
-                )
+                ShippingAddress.objects.create(order=order, **shipping_address_data)
 
         return order
 
     def update(self, instance, validated_data):
-        """Handle nested updates with bulk operations and total recalculation."""
         order_items_data = validated_data.pop("order_items", None)
         shipping_address_data = validated_data.pop("shipping_address", None)
 
-        with transaction.atomic():  # Wrap operations in a transaction
-            # Update order fields (excluding total)
+        with transaction.atomic():
             for attr, value in validated_data.items():
                 setattr(instance, attr, value)
             instance.save()
 
-            # Update or create order items and recalculate total
-            total = Decimal("0.00")
             if order_items_data is not None:
-                # Delete existing items
                 instance.order_items.all().delete()
-                # Bulk create new items
+                total = Decimal("0.00")
                 order_items = []
                 for item_data in order_items_data:
                     total_amount = item_data["price"] * item_data["quantity"]
@@ -92,25 +79,22 @@ class OrderSerializer(serializers.ModelSerializer):
                     order_items.append(OrderItem(order=instance, **item_data))
                     total += total_amount
                 OrderItem.objects.bulk_create(order_items)
-                # Update total
                 instance.total = total
                 instance.save()
 
-            # Update or create shipping address
             if shipping_address_data is not None:
                 if hasattr(instance, "shipping_address"):
                     for attr, value in shipping_address_data.items():
                         setattr(instance.shipping_address, attr, value)
                     instance.shipping_address.save()
                 else:
-                    OrderShippingAddress.objects.create(
+                    ShippingAddress.objects.create(
                         order=instance, **shipping_address_data
                     )
 
         return instance
 
     def validate_purchase_date(self, value):
-        """Ensure purchase_date is not in the future."""
         if value > timezone.now():
             raise serializers.ValidationError("Purchase date cannot be in the future.")
         return value

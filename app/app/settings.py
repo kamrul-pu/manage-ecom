@@ -62,7 +62,7 @@ PROJECT_APPS = [
     "core",
     "common",
     "inventory",
-    # "order",
+    "order",
     "product",
     "store",
 ]

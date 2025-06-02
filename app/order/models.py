@@ -1,31 +1,30 @@
 from django.db import models
+
+from common.choices import MarketPlace
 from common.models import BaseModelWithUID
+
+from order.choices import DispatchStatus, PickedItemType, PaymentStatus
 
 
 class Order(BaseModelWithUID):
-    channel = models.ForeignKey(
-        "channel.Channel",
-        related_name="channel_orders",
+    store = models.ForeignKey(
+        "store.Store",
+        related_name="orders",
         on_delete=models.CASCADE,
         blank=True,
         null=True,
         help_text="The sales channel this order originates from.",
     )
-    channel_order_id = models.CharField(
+    marketplace_order_id = models.CharField(
         max_length=50,
         unique=True,
         db_index=True,
-        help_text="Unique order ID from the channel.",
+        help_text="Unique order ID from the Store.",
     )
     payment_status = models.CharField(
         max_length=20,
-        choices=[
-            ("PENDING", "Pending"),
-            ("PAID", "Paid"),
-            ("FAILED", "Failed"),
-            ("REFUNDED", "Refunded"),
-        ],
-        default="PENDING",
+        choices=PaymentStatus.choices,
+        default=PaymentStatus.PENDING,
         help_text="Current payment status of the order.",
     )
     payment_method = models.CharField(
@@ -37,28 +36,26 @@ class Order(BaseModelWithUID):
         help_text="Date and time the order was placed."
     )
     currency = models.CharField(
-        max_length=3, default="USD", help_text="Currency code (e.g., USD, EUR)."
+        max_length=20,
+        blank=True,
+        default="USD",
+        help_text="Currency code (e.g., USD, EUR).",
     )
     total = models.DecimalField(
         max_digits=12, decimal_places=2, default=0.00, help_text="Total order amount."
     )
-    market_place = models.CharField(
+    marketplace = models.CharField(
         max_length=50,
+        choices=MarketPlace.choices,
         blank=True,
-        null=True,
+        default=MarketPlace.OTHER,
+        db_index=True,
         help_text="Marketplace name (e.g., Amazon, eBay).",
     )
     dispatch_status = models.CharField(
         max_length=20,
-        choices=[
-            ("OPEN_ORDER", "Open Order"),
-            ("CLOSED", "Closed"),
-            ("DISPATCHED", "Dispatched"),
-            ("FAILED", "Failed"),
-            ("CANCELLED", "Cancelled"),
-            ("PENDING", "Pending"),
-        ],
-        default="OPEN_ORDER",
+        choices=DispatchStatus.choices,
+        default=DispatchStatus.OPEN_ORDER,
         help_text="Current dispatch status of the order.",
     )
     dispatch_identifier = models.CharField(
@@ -83,11 +80,11 @@ class Order(BaseModelWithUID):
     )
 
     class Meta:
-        indexes = [
-            models.Index(fields=["channel_order_id", "channel_id"]),
-        ]
         verbose_name = "Order"
         verbose_name_plural = "Orders"
+
+    def __str__(self) -> str:
+        return f"{self.marketplace} - {self.marketplace_order_id}"
 
     def get_order_items_sku_list(self):
         """Return a list of remote SKUs for order items."""
@@ -108,6 +105,7 @@ class OrderItem(BaseModelWithUID):
     sku = models.CharField(
         max_length=128, blank=True, null=True, help_text="SKU from the channel."
     )
+    local_sku = models.CharField(max_length=128, blank=True)
     quantity = models.PositiveIntegerField(
         default=1, help_text="Number of items ordered."
     )
@@ -134,10 +132,7 @@ class OrderItem(BaseModelWithUID):
     )
     picked_item_type = models.CharField(
         max_length=20,
-        choices=[
-            ("EXACT_ITEM", "Exact Item"),
-            ("EXCHANGE_ITEM", "Exchange Item"),
-        ],
+        choices=PickedItemType.choices,
         blank=True,
         help_text="Type of picked item.",
     )
@@ -156,6 +151,9 @@ class OrderItem(BaseModelWithUID):
         verbose_name = "Order Item"
         verbose_name_plural = "Order Items"
 
+    def __str__(self) -> str:
+        return f"{self.sku} - {self.quantity} pcs"
+
     def save(self, *args, **kwargs):
         """Automatically calculate total_amount if not provided."""
         if self.price is not None and self.quantity is not None:
@@ -163,7 +161,7 @@ class OrderItem(BaseModelWithUID):
         super().save(*args, **kwargs)
 
 
-class OrderShippingAddress(BaseModelWithUID):
+class ShippingAddress(BaseModelWithUID):
     order = models.OneToOneField(
         Order,
         on_delete=models.CASCADE,
@@ -201,5 +199,8 @@ class OrderShippingAddress(BaseModelWithUID):
     email = models.EmailField(blank=True, null=True, help_text="Contact email address.")
 
     class Meta:
-        verbose_name = "Order Shipping Address"
-        verbose_name_plural = "Order Shipping Addresses"
+        verbose_name = "Shipping Address"
+        verbose_name_plural = "Shipping Addresses"
+
+    def __str__(self) -> str:
+        return f"{self.buyer_name} - {self.city}, {self.country}"
