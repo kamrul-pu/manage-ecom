@@ -16,9 +16,31 @@ from product.models import Product, Mapping
 
 
 class ProductList(ListCreateAPIView):
-    queryset = Product().get_all_actives()
     serializer_class = ProductListSerializer
     permission_classes = (AllowAny,)
+
+    def get_queryset(self):
+        queryset = Product().get_all_actives().select_related("organization")
+        name = self.request.query_params.get("name", None)
+        sku = self.request.query_params.get("sku", None)
+        organization_uid = self.request.query_params.get("organization_uid", None)
+        barcode = self.request.query_params.get("barcode", None)
+        style = self.request.query_params.get("style", None)
+        color = self.request.query_params.get("color", None)
+        if name:
+            queryset = queryset.filter(name__icontains=name)
+        if color:
+            queryset = queryset.filter(color__icontains=color)
+        if style:
+            queryset = queryset.filter(style=style)
+        if barcode:
+            queryset = queryset.filter(barcode=barcode)
+        if organization_uid:
+            queryset = queryset.filter(organization__uid=organization_uid)
+        if sku:
+            queryset = queryset.filter(sku=sku)
+        return queryset
+        return super().get_queryset()
 
 
 class ProductDetail(RetrieveUpdateDestroyAPIView):
