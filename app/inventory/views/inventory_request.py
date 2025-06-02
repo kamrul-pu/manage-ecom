@@ -2,7 +2,10 @@ from rest_framework import generics
 from rest_framework.permissions import AllowAny
 
 from inventory.models import InventoryRequest
-from inventory.serializers.inventory_request import InventoryRequestListSerializer, InventoryRequestDetailSerializer
+from inventory.serializers.inventory_request import (
+    InventoryRequestListSerializer,
+    InventoryRequestDetailSerializer,
+)
 
 
 # InventoryRequestStock Views

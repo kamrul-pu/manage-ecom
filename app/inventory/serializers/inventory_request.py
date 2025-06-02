@@ -20,6 +20,7 @@ class InventoryRequestBase(serializers.ModelSerializer):
             "uid",
         )
 
+
 class InventoryRequestListSerializer(InventoryRequestBase):
     class Meta(InventoryRequestBase.Meta):
         fields = InventoryRequestBase.Meta.fields + ()
@@ -37,4 +38,3 @@ class InventoryRequestDetailSerializer(InventoryRequestListSerializer):
             "created_at",
             "updated_at",
         )
-
