@@ -41,7 +41,10 @@ class ProductMappingList(ListCreateAPIView):
             product = Product.objects.get(uid=uid)
         except Product.DoesNotExist:
             return Mapping.objects.none()
-        queryset = Mapping.objects.filter(product_id=product.id)
+        queryset = Mapping.objects.filter(product_id=product.id).select_related(
+            "product", "marketplace_product", "store"
+        )
+
         return queryset
 
     def perform_create(self, serializer):

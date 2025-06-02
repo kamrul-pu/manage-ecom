@@ -40,7 +40,7 @@ class StoreWareHouseList(ListCreateAPIView):
             store = Store.objects.get(uid=uid)
         except Store.DoesNotExist:
             return Warehouse.objects.none()
-        queryset = Warehouse.objects.filter(store_id=store.id)
+        queryset = Warehouse.objects.filter(store_id=store.id).select_related("store")
         return queryset
 
     def perform_create(self, serializer):
