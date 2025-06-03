@@ -54,7 +54,8 @@ class ShippingAddressFactory(factory.django.DjangoModelFactory):
     class Meta:
         model = ShippingAddress
 
-    order = factory.Iterator(Order().get_all_actives())
+    # order = factory.Iterator(Order().get_all_actives())
+    order = factory.SubFactory(OrderFactory)
     buyer_name = factory.Faker("name")
     address1 = factory.Faker("street_address")
     address2 = factory.Faker("secondary_address")

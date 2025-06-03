@@ -4,15 +4,22 @@ import sys
 
 try:
     # RabbitMQ connection with explicit port
-    credentials = pika.PlainCredentials("kamrul", "kamrul")
-    connection = pika.BlockingConnection(
-        pika.ConnectionParameters(
-            host="localhost",
-            port=5674,
-            credentials=credentials,
-            virtual_host="/",
-        )
+    # credentials = pika.PlainCredentials("kamrul", "kamrul")
+    # connection = pika.BlockingConnection(
+    #     pika.ConnectionParameters(
+    #         host="localhost",
+    #         port=5674,
+    #         credentials=credentials,
+    #         virtual_host="/",
+    #     )
+    # )
+    # channel = connection.channel()
+    # Rabbit MQ Server Connection
+    url: str = (
+        "amqps://gbriuwzj:xahrgtIjgs1zgR-qXCHRbK8BMWXXTXq0@possum.lmq.cloudamqp.com/gbriuwzj"
     )
+    parameters = pika.URLParameters(url)
+    connection = pika.BlockingConnection(parameters)
     channel = connection.channel()
 
     # Declare queue (durable)
@@ -20,7 +27,7 @@ try:
 
     # Updated payload to match consumer expectation
     order_data = {
-        "store_uid": 4,  # store ID (foreign key in Order model)
+        "store_uid": "1987b409-1777-46e6-8c4e-b4374c6290ee",  # store ID (foreign key in Order model)
         "marketplace_order_id": "ORD1002",  # aligned with model field
         "payment_status": "PENDING",
         "payment_method": "PayPal",
@@ -28,24 +35,22 @@ try:
         "currency": "EUR",
         "marketplace": "Amazon",  # corrected key from "market_place"
         "dispatch_status": "OPEN_ORDER",
-        "dispatched_by": "550e8400-e29b-41d4-a716-446655440011",
-        "dispatched_at": None,
-        "shipped_at": None,
+        "total": "135.00",
         "order_meta": {"subtotal_price": 135.00},
         "order_items": [
             {
-                "remote_sku": "P003",  # must match the consumer's expected key
+                "marketplace_sku": "8629287785589",  # must match the consumer's expected key
                 "quantity": 3,
                 "price": 25.00,
-                "picked_sku": "P003-PICKED",
-                "picked_item_type": "MANUAL",
+                "picked_sku": "",
+                "picked_item_type": "",
             },
             {
-                "remote_sku": "P004",
+                "marketplace_sku": "9194835496273",
                 "quantity": 2,
                 "price": 30.00,
-                "picked_sku": "P004-PICKED",
-                "picked_item_type": "AUTO",
+                "picked_sku": "",
+                "picked_item_type": "",
             },
         ],
         "shipping_address": {
@@ -79,3 +84,17 @@ except pika.exceptions.AMQPConnectionError as e:
 except Exception as e:
     print(f"❌ Unexpected error: {e}", file=sys.stderr)
     sys.exit(1)
+
+
+# url: str = (
+#     "amqps://gbriuwzj:xahrgtIjgs1zgR-qXCHRbK8BMWXXTXq0@possum.lmq.cloudamqp.com/gbriuwzj"
+# )
+
+# parameters = pika.URLParameters(url)
+# connection = pika.BlockingConnection(parameters)
+# channel = connection.channel()
+
+# channel.queue_declare(queue="hello")
+# channel.basic_publish(exchange="", routing_key="hello", body="Hello CloudAMQP Test 2")
+# print("Send hello cloudamqp Test 2")
+# connection.close()
