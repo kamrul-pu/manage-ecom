@@ -1,3 +1,6 @@
+from django.db.models import Sum, F
+from django.db.models.functions import Coalesce
+
 from rest_framework.response import Response
 from rest_framework import status
 
@@ -39,12 +42,27 @@ class ProductList(ListCreateAPIView):
             queryset = queryset.filter(organization__uid=organization_uid)
         if sku:
             queryset = queryset.filter(sku=sku)
+
+        # Annotate stock values
+        queryset = queryset.annotate(
+            stock_level=Coalesce(Sum("stocks__stock_level"), 0),
+            in_open=Coalesce(Sum("stocks__in_open"), 0),
+            available=Coalesce(Sum("stocks__stock_level") - Sum("stocks__in_open"), 0),
+        )
         return queryset
-        return super().get_queryset()
 
 
 class ProductDetail(RetrieveUpdateDestroyAPIView):
-    queryset = Product().get_all_actives().select_related("organization")
+    queryset = (
+        Product()
+        .get_all_actives()
+        .select_related("organization")
+        .annotate(
+            stock_level=Coalesce(Sum("stocks__stock_level"), 0),
+            in_open=Coalesce(Sum("stocks__in_open"), 0),
+            available=Coalesce(Sum("stocks__stock_level") - Sum("stocks__in_open"), 0),
+        )
+    )
     serializer_class = ProductDetailSerializer
     permission_classes = (AllowAny,)
     lookup_field = "uid"

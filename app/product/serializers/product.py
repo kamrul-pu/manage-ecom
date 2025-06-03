@@ -1,9 +1,9 @@
-from rest_framework.serializers import ModelSerializer
+from rest_framework import serializers
 from product.models import Product
 from core.serializers.organization import OrganizationBase
 
 
-class ProductBase(ModelSerializer):
+class ProductBase(serializers.ModelSerializer):
     class Meta:
         model = Product
         fields = (
@@ -35,12 +35,19 @@ class ProductBase(ModelSerializer):
 
 
 class ProductListSerializer(ProductBase):
+    stock_level = serializers.IntegerField(read_only=True)
+    in_open = serializers.IntegerField(read_only=True)
+    available = serializers.IntegerField(read_only=True)
+
     class Meta(ProductBase.Meta):
         fields = ProductBase.Meta.fields + (
             "is_composite",
             "is_child",
             "stock_notification",
             "metadata",
+            "stock_level",
+            "in_open",
+            "available",
         )
         read_only_fields = ProductBase.Meta.read_only_fields + ()
 
