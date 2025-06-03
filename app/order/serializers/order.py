@@ -3,6 +3,7 @@ from django.utils import timezone
 from django.db import transaction
 from rest_framework import serializers
 
+from order.choices import DispatchStatus
 from order.models import Order, OrderItem, ShippingAddress
 from order.serializers.order_items import OrderItemSerializer
 from order.serializers.shipping_address import ShippingAddressSerializer
@@ -15,6 +16,7 @@ class OrderSerializer(serializers.ModelSerializer):
     class Meta:
         model = Order
         fields = (
+            "id",
             "uid",
             "store",
             "marketplace_order_id",
@@ -33,7 +35,7 @@ class OrderSerializer(serializers.ModelSerializer):
             "order_items",
             "shipping_address",
         )
-        read_only_fields = ("uid", "total")
+        read_only_fields = ("id", "uid", "total")
 
     def create(self, validated_data):
         order_items_data = validated_data.pop("order_items", [])
@@ -98,3 +100,8 @@ class OrderSerializer(serializers.ModelSerializer):
         if value > timezone.now():
             raise serializers.ValidationError("Purchase date cannot be in the future.")
         return value
+
+
+class OrderStatusUpdateSerializer(serializers.Serializer):
+    order_ids = serializers.ListField(child=serializers.IntegerField(), required=True)
+    dispatch_status = serializers.ChoiceField(choices=DispatchStatus.choices)

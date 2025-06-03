@@ -1,7 +1,13 @@
 from rest_framework import generics
+from rest_framework import status
+from rest_framework.response import Response
+from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated, AllowAny
-from order.models import Order
-from order.serializers.order import OrderSerializer
+
+from order.choices import DispatchStatus
+from inventory.models import Stock
+from order.models import Order, OrderItem
+from order.serializers.order import OrderSerializer, OrderStatusUpdateSerializer
 
 
 class OrderList(generics.ListCreateAPIView):
@@ -62,6 +68,59 @@ class OrderDetail(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = OrderSerializer
     permission_classes = (AllowAny,)
     lookup_field = "uid"
+
+
+def update_stock_on_status_change(order, dispatch_status):
+    order_items = OrderItem.objects.filter(order=order)
+
+    for item in order_items:
+        stock = Stock.objects.filter(sku=item.local_sku).first()
+        if not stock:
+            print(f"Stock not found for local SKU: {item.local_sku}")
+            continue
+
+        quantity = item.quantity
+
+        if dispatch_status in [DispatchStatus.OPEN_ORDER, DispatchStatus.PENDING]:
+            stock.in_open += quantity
+        elif dispatch_status == DispatchStatus.CANCELLED:
+            stock.in_open = max(0, stock.in_open - quantity)
+        elif dispatch_status == DispatchStatus.DISPATCHED:
+            stock.in_open = max(0, stock.in_open - quantity)
+            stock.stock_level = max(0, stock.stock_level - quantity)
+
+        stock.available = max(0, stock.stock_level - stock.in_open)
+        stock.save()
+
+        print(f"✅ Stock updated for {item.local_sku} ({dispatch_status})")
+
+
+class OrderStatusUpdateBulk(APIView):
+    serializer_class = OrderStatusUpdateSerializer
+
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        order_ids = serializer.validated_data.get("order_ids", [])
+        dispatch_status = serializer.validated_data.get("dispatch_status", "OPEN_ORDER")
+
+        # Fetch orders first (so we can update stock before changing status)
+        orders = Order.objects.filter(id__in=order_ids)
+
+        for order in orders:
+            update_stock_on_status_change(order, dispatch_status)
+            order.dispatch_status = dispatch_status
+            order.save()
+
+        return Response(
+            {
+                "message": f"{orders.count()} order(s) updated to '{dispatch_status}'.",
+                "status": dispatch_status,
+                "order_ids": order_ids,
+            },
+            status=status.HTTP_200_OK,
+        )
 
 
 # from rest_framework.views import APIView

@@ -14,6 +14,7 @@ class StockBase(serializers.ModelSerializer):
             "product",
             "stock_level",
             "in_open",
+            "available",
             "minimum_quantity",
             "reserve",
             "warehouse",

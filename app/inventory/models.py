@@ -10,9 +10,16 @@ class Stock(BaseModelWithUID):
         Product, on_delete=models.CASCADE, related_name="stocks"
     )
     sku = models.CharField(max_length=100, blank=True)
-    warehouse = models.ForeignKey("store.Warehouse", on_delete=models.CASCADE, related_name="stocks", blank=True, null=True)
+    warehouse = models.ForeignKey(
+        "store.Warehouse",
+        on_delete=models.CASCADE,
+        related_name="stocks",
+        blank=True,
+        null=True,
+    )
     stock_level = models.PositiveIntegerField(default=0)
     in_open = models.PositiveIntegerField(default=0)
+    available = models.PositiveIntegerField(default=0)
     minimum_quantity = models.PositiveIntegerField(default=0)
     reserve = models.PositiveIntegerField(default=0)
 

@@ -13,9 +13,39 @@ import django
 
 django.setup()
 
+from order.choices import DispatchStatus
 from order.models import Order, OrderItem, ShippingAddress
 from product.models import Product, MarketplaceProduct, Mapping
 from store.models import Store
+from inventory.models import Stock
+
+
+def update_related_stock(order, order_items):
+    for item in order_items:
+        stock = Stock.objects.get(sku=item.local_sku).first()
+        if stock:
+            quantity = item.quantity
+
+            if (
+                order.dispatch_status == DispatchStatus.OPEN_ORDER
+                or order.dispatch_status == DispatchStatus.PENDING
+            ):
+                stock.in_open += quantity
+            elif order.dispatch_status == DispatchStatus.CANCELLED:
+                stock.in_open = max(0, stock.in_open - quantity)
+            elif order.dispatch_status == DispatchStatus.DISPATCHED:
+                stock.in_open = max(0, stock.in_open - quantity)
+                stock.stock_level = max(0, stock.stock_level - quantity)
+
+            stock.available = max(0, stock.stock_level - stock.in_open)
+            stock.save()
+            print(
+                f"✅ Stock updated for product local: {item.local_sku} Marketplace: {item.sku}"
+            )
+        else:
+            print(
+                f"Stock not found for this local: {item.local_sku} Marketplace: {item.sku}"
+            )
 
 
 def main():
@@ -117,6 +147,7 @@ def main():
                 if order_items:
                     OrderItem.objects.bulk_create(order_items)
                     print(f"Created {len(order_items)} OrderItems.")
+                    update_related_stock(order, order_items)
                 else:
                     print("No order items found in the message.")
 
