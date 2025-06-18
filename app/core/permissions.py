@@ -19,6 +19,18 @@ class IsAdmin(BasePermission):
         )
 
 
+class IsAdminOrReadOnly(BasePermission):
+    """
+    Custom permission to allow admin users to perform any action,
+    while unauthenticated users can only read (GET) data.
+    """
+
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
+        return request.user and request.user.kind == UserKind.ADMIN
+
+
 class IsSuperAdmin(BasePermission):
     """
     Custom permission to only allow super admin users to access the view.
@@ -45,6 +57,18 @@ class IsManager(BasePermission):
     """
 
     def has_permission(self, request, view):
+        return request.user and request.user.kind == UserKind.MANAGER
+
+
+class IsManagerOrReadOnly(BasePermission):
+    """
+    Custom permission to allow manager users to perform any action,
+    while unauthenticated users can only read (GET) data.
+    """
+
+    def has_permission(self, request, view):
+        if request.method in permissions.SAFE_METHODS:
+            return True
         return request.user and request.user.kind == UserKind.MANAGER
 
 
