@@ -28,6 +28,17 @@ class IsSuperAdmin(BasePermission):
         return request.user and request.user.kind == UserKind.SUPER_ADMIN
 
 
+class IsAdminOrManager(BasePermission):
+    """
+    Custom permission to allow access to admin or manager users.
+    """
+
+    def has_permission(self, request, view):
+        return request.user and (
+            request.user.kind == UserKind.ADMIN or request.user.kind == UserKind.MANAGER
+        )
+
+
 class IsManager(BasePermission):
     """
     Custom permission to only allow manager users to access the view.
