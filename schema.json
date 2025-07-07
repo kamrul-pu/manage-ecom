@@ -1,0 +1,4598 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "E-COM Manager Backend API",
+    "description": "Test description",
+    "termsOfService": "https://www.google.com/policies/terms/",
+    "contact": {
+      "email": "contact@snippets.local"
+    },
+    "license": {
+      "name": "BSD License"
+    },
+    "version": "1.0"
+  },
+  "host": "localhost:8000",
+  "schemes": [
+    "http"
+  ],
+  "basePath": "/api/v1",
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "securityDefinitions": {
+    "Basic": {
+      "type": "basic"
+    }
+  },
+  "security": [
+    {
+      "Basic": []
+    }
+  ],
+  "paths": {
+    "/inventory/requests": {
+      "get": {
+        "operationId": "inventory_requests_list",
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "required": [
+                "count",
+                "results"
+              ],
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "integer"
+                },
+                "next": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "previous": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/InventoryRequestList"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      },
+      "post": {
+        "operationId": "inventory_requests_create",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/InventoryRequestList"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InventoryRequestList"
+            }
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      },
+      "parameters": []
+    },
+    "/inventory/requests/{uid}": {
+      "get": {
+        "operationId": "inventory_requests_read",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InventoryRequestDetail"
+            }
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      },
+      "put": {
+        "operationId": "inventory_requests_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/InventoryRequestDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InventoryRequestDetail"
+            }
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      },
+      "patch": {
+        "operationId": "inventory_requests_partial_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/InventoryRequestDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/InventoryRequestDetail"
+            }
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      },
+      "delete": {
+        "operationId": "inventory_requests_delete",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "uid",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }
+      ]
+    },
+    "/inventory/stocks": {
+      "get": {
+        "operationId": "inventory_stocks_list",
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "required": [
+                "count",
+                "results"
+              ],
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "integer"
+                },
+                "next": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "previous": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/StockList"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      },
+      "post": {
+        "operationId": "inventory_stocks_create",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StockList"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/StockList"
+            }
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      },
+      "parameters": []
+    },
+    "/inventory/stocks/{uid}": {
+      "get": {
+        "operationId": "inventory_stocks_read",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/StockDetail"
+            }
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      },
+      "put": {
+        "operationId": "inventory_stocks_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StockDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/StockDetail"
+            }
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      },
+      "patch": {
+        "operationId": "inventory_stocks_partial_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StockDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/StockDetail"
+            }
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      },
+      "delete": {
+        "operationId": "inventory_stocks_delete",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "inventory"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "uid",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }
+      ]
+    },
+    "/orders": {
+      "get": {
+        "operationId": "orders_list",
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "required": [
+                "count",
+                "results"
+              ],
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "integer"
+                },
+                "next": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "previous": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/Order"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "orders"
+        ]
+      },
+      "post": {
+        "operationId": "orders_create",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        },
+        "tags": [
+          "orders"
+        ]
+      },
+      "parameters": []
+    },
+    "/orders/update": {
+      "post": {
+        "operationId": "orders_update_create",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "orders"
+        ]
+      },
+      "parameters": []
+    },
+    "/orders/{uid}": {
+      "get": {
+        "operationId": "orders_read",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        },
+        "tags": [
+          "orders"
+        ]
+      },
+      "put": {
+        "operationId": "orders_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        },
+        "tags": [
+          "orders"
+        ]
+      },
+      "patch": {
+        "operationId": "orders_partial_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Order"
+            }
+          }
+        },
+        "tags": [
+          "orders"
+        ]
+      },
+      "delete": {
+        "operationId": "orders_delete",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "orders"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "uid",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }
+      ]
+    },
+    "/organizations": {
+      "get": {
+        "operationId": "organizations_list",
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "required": [
+                "count",
+                "results"
+              ],
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "integer"
+                },
+                "next": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "previous": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/OrganizationList"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "organizations"
+        ]
+      },
+      "post": {
+        "operationId": "organizations_create",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OrganizationList"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/OrganizationList"
+            }
+          }
+        },
+        "tags": [
+          "organizations"
+        ]
+      },
+      "parameters": []
+    },
+    "/organizations/{uid}": {
+      "get": {
+        "operationId": "organizations_read",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/OrganizationDetail"
+            }
+          }
+        },
+        "tags": [
+          "organizations"
+        ]
+      },
+      "put": {
+        "operationId": "organizations_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OrganizationDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/OrganizationDetail"
+            }
+          }
+        },
+        "tags": [
+          "organizations"
+        ]
+      },
+      "patch": {
+        "operationId": "organizations_partial_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/OrganizationDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/OrganizationDetail"
+            }
+          }
+        },
+        "tags": [
+          "organizations"
+        ]
+      },
+      "delete": {
+        "operationId": "organizations_delete",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "organizations"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "uid",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }
+      ]
+    },
+    "/products": {
+      "get": {
+        "operationId": "products_list",
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "required": [
+                "count",
+                "results"
+              ],
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "integer"
+                },
+                "next": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "previous": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/ProductList"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "products"
+        ]
+      },
+      "post": {
+        "operationId": "products_create",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProductList"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ProductList"
+            }
+          }
+        },
+        "tags": [
+          "products"
+        ]
+      },
+      "parameters": []
+    },
+    "/products/mappings": {
+      "get": {
+        "operationId": "products_mappings_list",
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "required": [
+                "count",
+                "results"
+              ],
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "integer"
+                },
+                "next": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "previous": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/MappingList"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "products"
+        ]
+      },
+      "post": {
+        "operationId": "products_mappings_create",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MappingList"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/MappingList"
+            }
+          }
+        },
+        "tags": [
+          "products"
+        ]
+      },
+      "parameters": []
+    },
+    "/products/mappings/{uid}": {
+      "get": {
+        "operationId": "products_mappings_read",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/MappingDetail"
+            }
+          }
+        },
+        "tags": [
+          "products"
+        ]
+      },
+      "put": {
+        "operationId": "products_mappings_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MappingDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/MappingDetail"
+            }
+          }
+        },
+        "tags": [
+          "products"
+        ]
+      },
+      "patch": {
+        "operationId": "products_mappings_partial_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MappingDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/MappingDetail"
+            }
+          }
+        },
+        "tags": [
+          "products"
+        ]
+      },
+      "delete": {
+        "operationId": "products_mappings_delete",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "products"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "uid",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }
+      ]
+    },
+    "/products/marketplace-products": {
+      "get": {
+        "operationId": "products_marketplace-products_list",
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "required": [
+                "count",
+                "results"
+              ],
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "integer"
+                },
+                "next": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "previous": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/MarketplaceProductList"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "products"
+        ]
+      },
+      "post": {
+        "operationId": "products_marketplace-products_create",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MarketplaceProductList"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/MarketplaceProductList"
+            }
+          }
+        },
+        "tags": [
+          "products"
+        ]
+      },
+      "parameters": []
+    },
+    "/products/marketplace-products/{uid}": {
+      "get": {
+        "operationId": "products_marketplace-products_read",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/MarketplaceProductDetail"
+            }
+          }
+        },
+        "tags": [
+          "products"
+        ]
+      },
+      "put": {
+        "operationId": "products_marketplace-products_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MarketplaceProductDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/MarketplaceProductDetail"
+            }
+          }
+        },
+        "tags": [
+          "products"
+        ]
+      },
+      "patch": {
+        "operationId": "products_marketplace-products_partial_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MarketplaceProductDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/MarketplaceProductDetail"
+            }
+          }
+        },
+        "tags": [
+          "products"
+        ]
+      },
+      "delete": {
+        "operationId": "products_marketplace-products_delete",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "products"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "uid",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }
+      ]
+    },
+    "/products/{uid}": {
+      "get": {
+        "operationId": "products_read",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ProductDetail"
+            }
+          }
+        },
+        "tags": [
+          "products"
+        ]
+      },
+      "put": {
+        "operationId": "products_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProductDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ProductDetail"
+            }
+          }
+        },
+        "tags": [
+          "products"
+        ]
+      },
+      "patch": {
+        "operationId": "products_partial_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/ProductDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/ProductDetail"
+            }
+          }
+        },
+        "tags": [
+          "products"
+        ]
+      },
+      "delete": {
+        "operationId": "products_delete",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "products"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "uid",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }
+      ]
+    },
+    "/products/{uid}/mappings": {
+      "get": {
+        "operationId": "products_mappings_list",
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "required": [
+                "count",
+                "results"
+              ],
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "integer"
+                },
+                "next": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "previous": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/MappingList"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "products"
+        ]
+      },
+      "post": {
+        "operationId": "products_mappings_create",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/MappingList"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/MappingList"
+            }
+          }
+        },
+        "tags": [
+          "products"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "uid",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }
+      ]
+    },
+    "/stores": {
+      "get": {
+        "operationId": "stores_list",
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "required": [
+                "count",
+                "results"
+              ],
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "integer"
+                },
+                "next": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "previous": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/StoreList"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "stores"
+        ]
+      },
+      "post": {
+        "operationId": "stores_create",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StoreList"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/StoreList"
+            }
+          }
+        },
+        "tags": [
+          "stores"
+        ]
+      },
+      "parameters": []
+    },
+    "/stores/{uid}": {
+      "get": {
+        "operationId": "stores_read",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/StoreDetail"
+            }
+          }
+        },
+        "tags": [
+          "stores"
+        ]
+      },
+      "put": {
+        "operationId": "stores_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StoreDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/StoreDetail"
+            }
+          }
+        },
+        "tags": [
+          "stores"
+        ]
+      },
+      "patch": {
+        "operationId": "stores_partial_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/StoreDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/StoreDetail"
+            }
+          }
+        },
+        "tags": [
+          "stores"
+        ]
+      },
+      "delete": {
+        "operationId": "stores_delete",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "stores"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "uid",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }
+      ]
+    },
+    "/stores/{uid}/warehouses": {
+      "get": {
+        "operationId": "stores_warehouses_list",
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "required": [
+                "count",
+                "results"
+              ],
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "integer"
+                },
+                "next": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "previous": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/WarehouseList"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "stores"
+        ]
+      },
+      "post": {
+        "operationId": "stores_warehouses_create",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WarehouseList"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/WarehouseList"
+            }
+          }
+        },
+        "tags": [
+          "stores"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "uid",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ]
+    },
+    "/users": {
+      "get": {
+        "operationId": "users_list",
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "required": [
+                "count",
+                "results"
+              ],
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "integer"
+                },
+                "next": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "previous": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/UserList"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
+      "post": {
+        "operationId": "users_create",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserList"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UserList"
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
+      "parameters": []
+    },
+    "/users/login": {
+      "post": {
+        "operationId": "users_login_create",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
+      "parameters": []
+    },
+    "/users/me": {
+      "get": {
+        "operationId": "users_me_read",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Me"
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
+      "put": {
+        "operationId": "users_me_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Me"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Me"
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
+      "patch": {
+        "operationId": "users_me_partial_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/Me"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/Me"
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
+      "parameters": []
+    },
+    "/users/register": {
+      "post": {
+        "operationId": "users_register_create",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserRegistration"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UserRegistration"
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
+      "parameters": []
+    },
+    "/users/token": {
+      "post": {
+        "operationId": "users_token_create",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
+      "parameters": []
+    },
+    "/users/token/refresh": {
+      "post": {
+        "operationId": "users_token_refresh_create",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "201": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
+      "parameters": []
+    },
+    "/users/{uid}": {
+      "get": {
+        "operationId": "users_read",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UserDetail"
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
+      "put": {
+        "operationId": "users_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UserDetail"
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
+      "patch": {
+        "operationId": "users_partial_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/UserDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/UserDetail"
+            }
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
+      "delete": {
+        "operationId": "users_delete",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "users"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "uid",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }
+      ]
+    },
+    "/warehouses": {
+      "get": {
+        "operationId": "warehouses_list",
+        "description": "",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "description": "A page number within the paginated result set.",
+            "required": false,
+            "type": "integer"
+          },
+          {
+            "name": "page_size",
+            "in": "query",
+            "description": "Number of results to return per page.",
+            "required": false,
+            "type": "integer"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "required": [
+                "count",
+                "results"
+              ],
+              "type": "object",
+              "properties": {
+                "count": {
+                  "type": "integer"
+                },
+                "next": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "previous": {
+                  "type": "string",
+                  "format": "uri",
+                  "x-nullable": true
+                },
+                "results": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/definitions/WarehouseList"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "warehouses"
+        ]
+      },
+      "post": {
+        "operationId": "warehouses_create",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WarehouseList"
+            }
+          }
+        ],
+        "responses": {
+          "201": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/WarehouseList"
+            }
+          }
+        },
+        "tags": [
+          "warehouses"
+        ]
+      },
+      "parameters": []
+    },
+    "/warehouses/{uid}": {
+      "get": {
+        "operationId": "warehouses_read",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/WarehouseDetail"
+            }
+          }
+        },
+        "tags": [
+          "warehouses"
+        ]
+      },
+      "put": {
+        "operationId": "warehouses_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WarehouseDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/WarehouseDetail"
+            }
+          }
+        },
+        "tags": [
+          "warehouses"
+        ]
+      },
+      "patch": {
+        "operationId": "warehouses_partial_update",
+        "description": "",
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/WarehouseDetail"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/WarehouseDetail"
+            }
+          }
+        },
+        "tags": [
+          "warehouses"
+        ]
+      },
+      "delete": {
+        "operationId": "warehouses_delete",
+        "description": "",
+        "parameters": [],
+        "responses": {
+          "204": {
+            "description": ""
+          }
+        },
+        "tags": [
+          "warehouses"
+        ]
+      },
+      "parameters": [
+        {
+          "name": "uid",
+          "in": "path",
+          "required": true,
+          "type": "string",
+          "format": "uuid"
+        }
+      ]
+    }
+  },
+  "definitions": {
+    "InventoryRequestList": {
+      "required": [
+        "sku"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "sku": {
+          "title": "Sku",
+          "type": "string",
+          "maxLength": 100,
+          "minLength": 1
+        },
+        "quantity": {
+          "title": "Quantity",
+          "type": "integer",
+          "maximum": 9.223372036854776e+18,
+          "minimum": 0
+        },
+        "metadata": {
+          "title": "Metadata",
+          "type": "object"
+        },
+        "request_status": {
+          "title": "Request status",
+          "type": "string",
+          "enum": [
+            "PENDING",
+            "APPROVED",
+            "REJECTED",
+            "PROCESSING",
+            "COMPLETED",
+            "CANCELLED"
+          ]
+        },
+        "dispatch_by": {
+          "title": "Dispatch by",
+          "type": "string",
+          "maxLength": 100
+        },
+        "stock_procced_at": {
+          "title": "Stock procced at",
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        }
+      }
+    },
+    "InventoryRequestDetail": {
+      "required": [
+        "sku"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "sku": {
+          "title": "Sku",
+          "type": "string",
+          "maxLength": 100,
+          "minLength": 1
+        },
+        "quantity": {
+          "title": "Quantity",
+          "type": "integer",
+          "maximum": 9.223372036854776e+18,
+          "minimum": 0
+        },
+        "metadata": {
+          "title": "Metadata",
+          "type": "object"
+        },
+        "request_status": {
+          "title": "Request status",
+          "type": "string",
+          "enum": [
+            "PENDING",
+            "APPROVED",
+            "REJECTED",
+            "PROCESSING",
+            "COMPLETED",
+            "CANCELLED"
+          ]
+        },
+        "dispatch_by": {
+          "title": "Dispatch by",
+          "type": "string",
+          "maxLength": 100
+        },
+        "stock_procced_at": {
+          "title": "Stock procced at",
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        },
+        "created_at": {
+          "title": "Created at",
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "updated_at": {
+          "title": "Updated at",
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        }
+      }
+    },
+    "StockList": {
+      "required": [
+        "product"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "sku": {
+          "title": "Sku",
+          "type": "string",
+          "maxLength": 100
+        },
+        "product": {
+          "title": "Product",
+          "type": "integer"
+        },
+        "stock_level": {
+          "title": "Stock level",
+          "type": "integer",
+          "maximum": 9.223372036854776e+18,
+          "minimum": 0
+        },
+        "in_open": {
+          "title": "In open",
+          "type": "integer",
+          "maximum": 9.223372036854776e+18,
+          "minimum": 0
+        },
+        "available": {
+          "title": "Available",
+          "type": "integer",
+          "maximum": 9.223372036854776e+18,
+          "minimum": 0
+        },
+        "minimum_quantity": {
+          "title": "Minimum quantity",
+          "type": "integer",
+          "maximum": 9.223372036854776e+18,
+          "minimum": 0
+        },
+        "reserve": {
+          "title": "Reserve",
+          "type": "integer",
+          "maximum": 9.223372036854776e+18,
+          "minimum": 0
+        },
+        "warehouse": {
+          "title": "Warehouse",
+          "type": "integer",
+          "x-nullable": true
+        }
+      }
+    },
+    "ProductBase": {
+      "required": [
+        "name",
+        "organization",
+        "sku"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "slug": {
+          "title": "Slug",
+          "type": "string",
+          "format": "slug",
+          "pattern": "^[-a-zA-Z0-9_]+$",
+          "readOnly": true,
+          "minLength": 1
+        },
+        "organization": {
+          "title": "Organization",
+          "type": "integer"
+        },
+        "sku": {
+          "title": "Sku",
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1
+        },
+        "barcode": {
+          "title": "Barcode",
+          "type": "string",
+          "maxLength": 256
+        },
+        "description": {
+          "title": "Description",
+          "type": "string",
+          "x-nullable": true
+        },
+        "selling_price": {
+          "title": "Selling price",
+          "type": "string",
+          "format": "decimal"
+        },
+        "selling_currency": {
+          "title": "Selling currency",
+          "type": "string",
+          "maxLength": 10
+        },
+        "purchase_price": {
+          "title": "Purchase price",
+          "type": "string",
+          "format": "decimal"
+        },
+        "purchase_currency": {
+          "title": "Purchase currency",
+          "type": "string",
+          "maxLength": 10
+        },
+        "style": {
+          "title": "Style",
+          "type": "string",
+          "maxLength": 128,
+          "x-nullable": true
+        },
+        "color": {
+          "title": "Color",
+          "type": "string",
+          "maxLength": 128,
+          "x-nullable": true
+        },
+        "image": {
+          "title": "Image",
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2048,
+          "x-nullable": true
+        },
+        "width": {
+          "title": "Width",
+          "type": "string",
+          "format": "decimal"
+        },
+        "height": {
+          "title": "Height",
+          "type": "string",
+          "format": "decimal"
+        },
+        "weight": {
+          "title": "Weight",
+          "type": "string",
+          "format": "decimal"
+        },
+        "depth": {
+          "title": "Depth",
+          "type": "string",
+          "format": "decimal"
+        }
+      }
+    },
+    "StockDetail": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "sku": {
+          "title": "Sku",
+          "type": "string",
+          "maxLength": 100
+        },
+        "product": {
+          "$ref": "#/definitions/ProductBase"
+        },
+        "stock_level": {
+          "title": "Stock level",
+          "type": "integer",
+          "maximum": 9.223372036854776e+18,
+          "minimum": 0
+        },
+        "in_open": {
+          "title": "In open",
+          "type": "integer",
+          "maximum": 9.223372036854776e+18,
+          "minimum": 0
+        },
+        "available": {
+          "title": "Available",
+          "type": "integer",
+          "maximum": 9.223372036854776e+18,
+          "minimum": 0
+        },
+        "minimum_quantity": {
+          "title": "Minimum quantity",
+          "type": "integer",
+          "maximum": 9.223372036854776e+18,
+          "minimum": 0
+        },
+        "reserve": {
+          "title": "Reserve",
+          "type": "integer",
+          "maximum": 9.223372036854776e+18,
+          "minimum": 0
+        },
+        "warehouse": {
+          "title": "Warehouse",
+          "type": "integer",
+          "x-nullable": true
+        },
+        "created_at": {
+          "title": "Created at",
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "updated_at": {
+          "title": "Updated at",
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        }
+      }
+    },
+    "OrderItem": {
+      "type": "object",
+      "properties": {
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "sku": {
+          "title": "Sku",
+          "description": "SKU from the channel.",
+          "type": "string",
+          "maxLength": 128,
+          "x-nullable": true
+        },
+        "local_sku": {
+          "title": "Local sku",
+          "type": "string",
+          "maxLength": 128
+        },
+        "quantity": {
+          "title": "Quantity",
+          "description": "Number of items ordered.",
+          "type": "integer",
+          "maximum": 9.223372036854776e+18,
+          "minimum": 0
+        },
+        "price": {
+          "title": "Price",
+          "description": "Price per unit.",
+          "type": "string",
+          "format": "decimal"
+        },
+        "total_amount": {
+          "title": "Total amount",
+          "description": "Total price for this item (price * quantity).",
+          "type": "string",
+          "format": "decimal",
+          "readOnly": true
+        },
+        "position_item_ids": {
+          "title": "Position item ids",
+          "description": "List of position item IDs (replaced ArrayField for portability).",
+          "type": "object",
+          "x-nullable": true
+        },
+        "picked_sku": {
+          "title": "Picked sku",
+          "description": "SKU of the picked item.",
+          "type": "string",
+          "maxLength": 128
+        },
+        "picked_at": {
+          "title": "Picked at",
+          "description": "Date and time the item was picked.",
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        },
+        "picked_item_type": {
+          "title": "Picked item type",
+          "description": "Type of picked item.",
+          "type": "string",
+          "enum": [
+            "EXACT_ITEM",
+            "EXCHANGE_ITEM"
+          ]
+        },
+        "packed_sku": {
+          "title": "Packed sku",
+          "description": "SKU of the packed item.",
+          "type": "string",
+          "maxLength": 128
+        },
+        "packed_at": {
+          "title": "Packed at",
+          "description": "Date and time the item was packed.",
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        }
+      }
+    },
+    "ShippingAddress": {
+      "type": "object",
+      "properties": {
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "buyer_name": {
+          "title": "Buyer name",
+          "description": "Name of the buyer.",
+          "type": "string",
+          "maxLength": 255
+        },
+        "address1": {
+          "title": "Address1",
+          "description": "Primary address line.",
+          "type": "string",
+          "maxLength": 255
+        },
+        "address2": {
+          "title": "Address2",
+          "description": "Secondary address line.",
+          "type": "string",
+          "maxLength": 255
+        },
+        "city": {
+          "title": "City",
+          "description": "City of the shipping address.",
+          "type": "string",
+          "maxLength": 100
+        },
+        "state": {
+          "title": "State",
+          "description": "State or province.",
+          "type": "string",
+          "maxLength": 100
+        },
+        "post_code": {
+          "title": "Post code",
+          "description": "Postal/ZIP code.",
+          "type": "string",
+          "maxLength": 20
+        },
+        "country": {
+          "title": "Country",
+          "description": "Country of the shipping address.",
+          "type": "string",
+          "maxLength": 100
+        },
+        "phone": {
+          "title": "Phone",
+          "description": "Contact phone number.",
+          "type": "string",
+          "maxLength": 20
+        },
+        "reference_id": {
+          "title": "Reference id",
+          "description": "External reference ID for the address.",
+          "type": "string",
+          "maxLength": 128,
+          "x-nullable": true
+        },
+        "email": {
+          "title": "Email",
+          "description": "Contact email address.",
+          "type": "string",
+          "format": "email",
+          "maxLength": 254,
+          "x-nullable": true
+        }
+      }
+    },
+    "Order": {
+      "required": [
+        "marketplace_order_id",
+        "purchase_date"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "store": {
+          "title": "Store",
+          "description": "The sales channel this order originates from.",
+          "type": "integer",
+          "x-nullable": true
+        },
+        "marketplace_order_id": {
+          "title": "Marketplace order id",
+          "description": "Unique order ID from the Store.",
+          "type": "string",
+          "maxLength": 50,
+          "minLength": 1
+        },
+        "payment_status": {
+          "title": "Payment status",
+          "description": "Current payment status of the order.",
+          "type": "string",
+          "enum": [
+            "PENDING",
+            "PAID",
+            "FAILED",
+            "REFUNDED"
+          ]
+        },
+        "payment_method": {
+          "title": "Payment method",
+          "description": "Method used for payment (e.g., Credit Card, PayPal).",
+          "type": "string",
+          "maxLength": 50
+        },
+        "purchase_date": {
+          "title": "Purchase date",
+          "description": "Date and time the order was placed.",
+          "type": "string",
+          "format": "date-time"
+        },
+        "currency": {
+          "title": "Currency",
+          "description": "Currency code (e.g., USD, EUR).",
+          "type": "string",
+          "maxLength": 20
+        },
+        "total": {
+          "title": "Total",
+          "description": "Total order amount.",
+          "type": "string",
+          "format": "decimal",
+          "readOnly": true
+        },
+        "marketplace": {
+          "title": "Marketplace",
+          "description": "Marketplace name (e.g., Amazon, eBay).",
+          "type": "string",
+          "enum": [
+            "AMAZON",
+            "BIG_COMMERCE",
+            "EBAY",
+            "OTTO",
+            "SHEIN",
+            "SHOPIFY",
+            "TEMU",
+            "TIKTOK_SHOP",
+            "WOOCOMMERCE",
+            "OTHER"
+          ]
+        },
+        "dispatch_status": {
+          "title": "Dispatch status",
+          "description": "Current dispatch status of the order.",
+          "type": "string",
+          "enum": [
+            "CLOSED",
+            "CANCELLED",
+            "DISPATCHED",
+            "FAILED",
+            "OPEN_ORDER",
+            "PENDING",
+            "RETURNED"
+          ]
+        },
+        "dispatch_identifier": {
+          "title": "Dispatch identifier",
+          "description": "Identifier for dispatch tracking.",
+          "type": "string",
+          "maxLength": 128
+        },
+        "dispatched_by": {
+          "title": "Dispatched by",
+          "description": "Entity or person who dispatched the order.",
+          "type": "string",
+          "maxLength": 128
+        },
+        "dispatched_at": {
+          "title": "Dispatched at",
+          "description": "Date and time of dispatch.",
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        },
+        "shipped_at": {
+          "title": "Shipped at",
+          "description": "Date and time of shipment.",
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        },
+        "order_meta": {
+          "title": "Order meta",
+          "description": "Additional metadata for the order.",
+          "type": "object",
+          "x-nullable": true
+        },
+        "order_items": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/OrderItem"
+          }
+        },
+        "shipping_address": {
+          "$ref": "#/definitions/ShippingAddress"
+        }
+      }
+    },
+    "OrganizationList": {
+      "required": [
+        "name"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "email": {
+          "title": "Email",
+          "type": "string",
+          "format": "email",
+          "maxLength": 255,
+          "x-nullable": true
+        },
+        "location": {
+          "title": "Location",
+          "type": "string",
+          "maxLength": 255,
+          "x-nullable": true
+        },
+        "slug": {
+          "title": "Slug",
+          "type": "string",
+          "format": "slug",
+          "pattern": "^[-a-zA-Z0-9_]+$",
+          "readOnly": true,
+          "minLength": 1
+        },
+        "logo": {
+          "title": "Logo",
+          "type": "string",
+          "readOnly": true,
+          "x-nullable": true,
+          "format": "uri"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string",
+          "x-nullable": true
+        },
+        "expiration_date": {
+          "title": "Subscription Expiration Date",
+          "description": "The date when the subscription expires.",
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        }
+      }
+    },
+    "OrganizationDetail": {
+      "required": [
+        "name"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "email": {
+          "title": "Email",
+          "type": "string",
+          "format": "email",
+          "maxLength": 255,
+          "x-nullable": true
+        },
+        "location": {
+          "title": "Location",
+          "type": "string",
+          "maxLength": 255,
+          "x-nullable": true
+        },
+        "slug": {
+          "title": "Slug",
+          "type": "string",
+          "format": "slug",
+          "pattern": "^[-a-zA-Z0-9_]+$",
+          "readOnly": true,
+          "minLength": 1
+        },
+        "logo": {
+          "title": "Logo",
+          "type": "string",
+          "readOnly": true,
+          "x-nullable": true,
+          "format": "uri"
+        },
+        "description": {
+          "title": "Description",
+          "type": "string",
+          "x-nullable": true
+        },
+        "expiration_date": {
+          "title": "Subscription Expiration Date",
+          "description": "The date when the subscription expires.",
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        },
+        "created_at": {
+          "title": "Created at",
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "updated_at": {
+          "title": "Updated at",
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        }
+      }
+    },
+    "ProductList": {
+      "required": [
+        "name",
+        "organization",
+        "sku"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "slug": {
+          "title": "Slug",
+          "type": "string",
+          "format": "slug",
+          "pattern": "^[-a-zA-Z0-9_]+$",
+          "readOnly": true,
+          "minLength": 1
+        },
+        "organization": {
+          "title": "Organization",
+          "type": "integer"
+        },
+        "sku": {
+          "title": "Sku",
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1
+        },
+        "barcode": {
+          "title": "Barcode",
+          "type": "string",
+          "maxLength": 256
+        },
+        "description": {
+          "title": "Description",
+          "type": "string",
+          "x-nullable": true
+        },
+        "selling_price": {
+          "title": "Selling price",
+          "type": "string",
+          "format": "decimal"
+        },
+        "selling_currency": {
+          "title": "Selling currency",
+          "type": "string",
+          "maxLength": 10
+        },
+        "purchase_price": {
+          "title": "Purchase price",
+          "type": "string",
+          "format": "decimal"
+        },
+        "purchase_currency": {
+          "title": "Purchase currency",
+          "type": "string",
+          "maxLength": 10
+        },
+        "style": {
+          "title": "Style",
+          "type": "string",
+          "maxLength": 128,
+          "x-nullable": true
+        },
+        "color": {
+          "title": "Color",
+          "type": "string",
+          "maxLength": 128,
+          "x-nullable": true
+        },
+        "image": {
+          "title": "Image",
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2048,
+          "x-nullable": true
+        },
+        "width": {
+          "title": "Width",
+          "type": "string",
+          "format": "decimal"
+        },
+        "height": {
+          "title": "Height",
+          "type": "string",
+          "format": "decimal"
+        },
+        "weight": {
+          "title": "Weight",
+          "type": "string",
+          "format": "decimal"
+        },
+        "depth": {
+          "title": "Depth",
+          "type": "string",
+          "format": "decimal"
+        },
+        "is_composite": {
+          "title": "Is composite",
+          "type": "boolean"
+        },
+        "is_child": {
+          "title": "Is child",
+          "type": "boolean"
+        },
+        "stock_notification": {
+          "title": "Stock notification",
+          "type": "boolean"
+        },
+        "metadata": {
+          "title": "Metadata",
+          "type": "object"
+        },
+        "stock_level": {
+          "title": "Stock level",
+          "type": "integer",
+          "readOnly": true
+        },
+        "in_open": {
+          "title": "In open",
+          "type": "integer",
+          "readOnly": true
+        },
+        "available": {
+          "title": "Available",
+          "type": "integer",
+          "readOnly": true
+        }
+      }
+    },
+    "MarketplaceProductBase": {
+      "required": [
+        "name",
+        "store"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "slug": {
+          "title": "Slug",
+          "type": "string",
+          "format": "slug",
+          "pattern": "^[-a-zA-Z0-9_]+$",
+          "readOnly": true,
+          "minLength": 1
+        },
+        "store": {
+          "title": "Store",
+          "type": "integer"
+        },
+        "marketplace_id": {
+          "title": "Marketplace id",
+          "type": "string",
+          "maxLength": 128
+        },
+        "marketplace": {
+          "title": "Marketplace",
+          "type": "string",
+          "enum": [
+            "AMAZON",
+            "BIG_COMMERCE",
+            "EBAY",
+            "OTTO",
+            "SHEIN",
+            "SHOPIFY",
+            "TEMU",
+            "TIKTOK_SHOP",
+            "WOOCOMMERCE",
+            "OTHER"
+          ]
+        },
+        "sku": {
+          "title": "Sku",
+          "type": "string",
+          "maxLength": 128
+        },
+        "category": {
+          "title": "Category",
+          "type": "string",
+          "maxLength": 512,
+          "x-nullable": true
+        },
+        "image": {
+          "title": "Image",
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2048,
+          "x-nullable": true
+        },
+        "url": {
+          "title": "Url",
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2048,
+          "x-nullable": true
+        },
+        "fbm": {
+          "title": "Fbm",
+          "type": "boolean"
+        },
+        "price": {
+          "title": "Price",
+          "type": "string",
+          "format": "decimal"
+        },
+        "currency": {
+          "title": "Currency",
+          "type": "string",
+          "maxLength": 10
+        }
+      }
+    },
+    "StoreBase": {
+      "required": [
+        "name",
+        "store_type"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "slug": {
+          "title": "Slug",
+          "type": "string",
+          "format": "slug",
+          "pattern": "^[-a-zA-Z0-9_]+$",
+          "readOnly": true,
+          "minLength": 1
+        },
+        "organization": {
+          "title": "Organization",
+          "type": "integer",
+          "x-nullable": true
+        },
+        "store_status": {
+          "title": "Store status",
+          "type": "string",
+          "enum": [
+            "ACTIVE",
+            "DEACTIVE",
+            "FAILED",
+            "PROCESSING",
+            "OTHER"
+          ]
+        },
+        "store_type": {
+          "title": "Store type",
+          "type": "string",
+          "maxLength": 20,
+          "minLength": 1
+        },
+        "shop_url": {
+          "title": "Shop url",
+          "type": "string",
+          "maxLength": 256
+        },
+        "marketplace": {
+          "title": "Marketplace",
+          "type": "string",
+          "enum": [
+            "AMAZON",
+            "BIG_COMMERCE",
+            "EBAY",
+            "OTTO",
+            "SHEIN",
+            "SHOPIFY",
+            "TEMU",
+            "TIKTOK_SHOP",
+            "WOOCOMMERCE",
+            "OTHER"
+          ]
+        },
+        "country": {
+          "title": "Country",
+          "type": "string",
+          "maxLength": 128
+        },
+        "description": {
+          "title": "Description",
+          "type": "string",
+          "x-nullable": true
+        }
+      }
+    },
+    "MappingList": {
+      "required": [
+        "marketplace"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "product": {
+          "$ref": "#/definitions/ProductBase"
+        },
+        "marketplace_product": {
+          "$ref": "#/definitions/MarketplaceProductBase"
+        },
+        "store": {
+          "$ref": "#/definitions/StoreBase"
+        },
+        "marketplace": {
+          "title": "Marketplace",
+          "type": "string",
+          "enum": [
+            "AMAZON",
+            "BIG_COMMERCE",
+            "EBAY",
+            "OTTO",
+            "SHEIN",
+            "SHOPIFY",
+            "TEMU",
+            "TIKTOK_SHOP",
+            "WOOCOMMERCE",
+            "OTHER"
+          ]
+        }
+      }
+    },
+    "MappingDetail": {
+      "required": [
+        "marketplace"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "product": {
+          "$ref": "#/definitions/ProductBase"
+        },
+        "marketplace_product": {
+          "$ref": "#/definitions/MarketplaceProductBase"
+        },
+        "store": {
+          "$ref": "#/definitions/StoreBase"
+        },
+        "marketplace": {
+          "title": "Marketplace",
+          "type": "string",
+          "enum": [
+            "AMAZON",
+            "BIG_COMMERCE",
+            "EBAY",
+            "OTTO",
+            "SHEIN",
+            "SHOPIFY",
+            "TEMU",
+            "TIKTOK_SHOP",
+            "WOOCOMMERCE",
+            "OTHER"
+          ]
+        },
+        "created_at": {
+          "title": "Created at",
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "updated_at": {
+          "title": "Updated at",
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        }
+      }
+    },
+    "MarketplaceProductList": {
+      "required": [
+        "name",
+        "store"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "slug": {
+          "title": "Slug",
+          "type": "string",
+          "format": "slug",
+          "pattern": "^[-a-zA-Z0-9_]+$",
+          "readOnly": true,
+          "minLength": 1
+        },
+        "store": {
+          "title": "Store",
+          "type": "integer"
+        },
+        "marketplace_id": {
+          "title": "Marketplace id",
+          "type": "string",
+          "maxLength": 128
+        },
+        "marketplace": {
+          "title": "Marketplace",
+          "type": "string",
+          "enum": [
+            "AMAZON",
+            "BIG_COMMERCE",
+            "EBAY",
+            "OTTO",
+            "SHEIN",
+            "SHOPIFY",
+            "TEMU",
+            "TIKTOK_SHOP",
+            "WOOCOMMERCE",
+            "OTHER"
+          ]
+        },
+        "sku": {
+          "title": "Sku",
+          "type": "string",
+          "maxLength": 128
+        },
+        "category": {
+          "title": "Category",
+          "type": "string",
+          "maxLength": 512,
+          "x-nullable": true
+        },
+        "image": {
+          "title": "Image",
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2048,
+          "x-nullable": true
+        },
+        "url": {
+          "title": "Url",
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2048,
+          "x-nullable": true
+        },
+        "fbm": {
+          "title": "Fbm",
+          "type": "boolean"
+        },
+        "price": {
+          "title": "Price",
+          "type": "string",
+          "format": "decimal"
+        },
+        "currency": {
+          "title": "Currency",
+          "type": "string",
+          "maxLength": 10
+        },
+        "metadata": {
+          "title": "Metadata",
+          "type": "object"
+        }
+      }
+    },
+    "MarketplaceProductDetail": {
+      "required": [
+        "name"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "slug": {
+          "title": "Slug",
+          "type": "string",
+          "format": "slug",
+          "pattern": "^[-a-zA-Z0-9_]+$",
+          "readOnly": true,
+          "minLength": 1
+        },
+        "store": {
+          "$ref": "#/definitions/StoreBase"
+        },
+        "marketplace_id": {
+          "title": "Marketplace id",
+          "type": "string",
+          "maxLength": 128
+        },
+        "marketplace": {
+          "title": "Marketplace",
+          "type": "string",
+          "enum": [
+            "AMAZON",
+            "BIG_COMMERCE",
+            "EBAY",
+            "OTTO",
+            "SHEIN",
+            "SHOPIFY",
+            "TEMU",
+            "TIKTOK_SHOP",
+            "WOOCOMMERCE",
+            "OTHER"
+          ]
+        },
+        "sku": {
+          "title": "Sku",
+          "type": "string",
+          "maxLength": 128
+        },
+        "category": {
+          "title": "Category",
+          "type": "string",
+          "maxLength": 512,
+          "x-nullable": true
+        },
+        "image": {
+          "title": "Image",
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2048,
+          "x-nullable": true
+        },
+        "url": {
+          "title": "Url",
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2048,
+          "x-nullable": true
+        },
+        "fbm": {
+          "title": "Fbm",
+          "type": "boolean"
+        },
+        "price": {
+          "title": "Price",
+          "type": "string",
+          "format": "decimal"
+        },
+        "currency": {
+          "title": "Currency",
+          "type": "string",
+          "maxLength": 10
+        },
+        "metadata": {
+          "title": "Metadata",
+          "type": "object"
+        },
+        "created_at": {
+          "title": "Created at",
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "updated_at": {
+          "title": "Updated at",
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        }
+      }
+    },
+    "OrganizationBase": {
+      "required": [
+        "name"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "email": {
+          "title": "Email",
+          "type": "string",
+          "format": "email",
+          "maxLength": 255,
+          "x-nullable": true
+        },
+        "location": {
+          "title": "Location",
+          "type": "string",
+          "maxLength": 255,
+          "x-nullable": true
+        },
+        "slug": {
+          "title": "Slug",
+          "type": "string",
+          "format": "slug",
+          "pattern": "^[-a-zA-Z0-9_]+$",
+          "readOnly": true,
+          "minLength": 1
+        },
+        "logo": {
+          "title": "Logo",
+          "type": "string",
+          "readOnly": true,
+          "x-nullable": true,
+          "format": "uri"
+        }
+      }
+    },
+    "ProductDetail": {
+      "required": [
+        "name",
+        "sku"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "slug": {
+          "title": "Slug",
+          "type": "string",
+          "format": "slug",
+          "pattern": "^[-a-zA-Z0-9_]+$",
+          "readOnly": true,
+          "minLength": 1
+        },
+        "organization": {
+          "$ref": "#/definitions/OrganizationBase"
+        },
+        "sku": {
+          "title": "Sku",
+          "type": "string",
+          "maxLength": 128,
+          "minLength": 1
+        },
+        "barcode": {
+          "title": "Barcode",
+          "type": "string",
+          "maxLength": 256
+        },
+        "description": {
+          "title": "Description",
+          "type": "string",
+          "x-nullable": true
+        },
+        "selling_price": {
+          "title": "Selling price",
+          "type": "string",
+          "format": "decimal"
+        },
+        "selling_currency": {
+          "title": "Selling currency",
+          "type": "string",
+          "maxLength": 10
+        },
+        "purchase_price": {
+          "title": "Purchase price",
+          "type": "string",
+          "format": "decimal"
+        },
+        "purchase_currency": {
+          "title": "Purchase currency",
+          "type": "string",
+          "maxLength": 10
+        },
+        "style": {
+          "title": "Style",
+          "type": "string",
+          "maxLength": 128,
+          "x-nullable": true
+        },
+        "color": {
+          "title": "Color",
+          "type": "string",
+          "maxLength": 128,
+          "x-nullable": true
+        },
+        "image": {
+          "title": "Image",
+          "type": "string",
+          "format": "uri",
+          "maxLength": 2048,
+          "x-nullable": true
+        },
+        "width": {
+          "title": "Width",
+          "type": "string",
+          "format": "decimal"
+        },
+        "height": {
+          "title": "Height",
+          "type": "string",
+          "format": "decimal"
+        },
+        "weight": {
+          "title": "Weight",
+          "type": "string",
+          "format": "decimal"
+        },
+        "depth": {
+          "title": "Depth",
+          "type": "string",
+          "format": "decimal"
+        },
+        "is_composite": {
+          "title": "Is composite",
+          "type": "boolean"
+        },
+        "is_child": {
+          "title": "Is child",
+          "type": "boolean"
+        },
+        "stock_notification": {
+          "title": "Stock notification",
+          "type": "boolean"
+        },
+        "metadata": {
+          "title": "Metadata",
+          "type": "object"
+        },
+        "stock_level": {
+          "title": "Stock level",
+          "type": "integer",
+          "readOnly": true
+        },
+        "in_open": {
+          "title": "In open",
+          "type": "integer",
+          "readOnly": true
+        },
+        "available": {
+          "title": "Available",
+          "type": "integer",
+          "readOnly": true
+        },
+        "created_at": {
+          "title": "Created at",
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "updated_at": {
+          "title": "Updated at",
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        }
+      }
+    },
+    "StoreList": {
+      "required": [
+        "name",
+        "store_type"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "slug": {
+          "title": "Slug",
+          "type": "string",
+          "format": "slug",
+          "pattern": "^[-a-zA-Z0-9_]+$",
+          "readOnly": true,
+          "minLength": 1
+        },
+        "organization": {
+          "title": "Organization",
+          "type": "integer",
+          "x-nullable": true
+        },
+        "store_status": {
+          "title": "Store status",
+          "type": "string",
+          "enum": [
+            "ACTIVE",
+            "DEACTIVE",
+            "FAILED",
+            "PROCESSING",
+            "OTHER"
+          ]
+        },
+        "store_type": {
+          "title": "Store type",
+          "type": "string",
+          "maxLength": 20,
+          "minLength": 1
+        },
+        "shop_url": {
+          "title": "Shop url",
+          "type": "string",
+          "maxLength": 256
+        },
+        "marketplace": {
+          "title": "Marketplace",
+          "type": "string",
+          "enum": [
+            "AMAZON",
+            "BIG_COMMERCE",
+            "EBAY",
+            "OTTO",
+            "SHEIN",
+            "SHOPIFY",
+            "TEMU",
+            "TIKTOK_SHOP",
+            "WOOCOMMERCE",
+            "OTHER"
+          ]
+        },
+        "country": {
+          "title": "Country",
+          "type": "string",
+          "maxLength": 128
+        },
+        "description": {
+          "title": "Description",
+          "type": "string",
+          "x-nullable": true
+        },
+        "is_authorized": {
+          "title": "Is authorized",
+          "type": "boolean"
+        },
+        "expires_on": {
+          "title": "Expires on",
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        },
+        "order_sync": {
+          "title": "Order sync",
+          "type": "boolean"
+        },
+        "inventory_sync": {
+          "title": "Inventory sync",
+          "type": "boolean"
+        },
+        "max_stock": {
+          "title": "Max stock",
+          "type": "integer",
+          "maximum": 9.223372036854776e+18,
+          "minimum": 0
+        },
+        "metadata": {
+          "title": "Metadata",
+          "type": "object"
+        },
+        "auth_type": {
+          "title": "Auth type",
+          "type": "string",
+          "enum": [
+            "BASIC",
+            "OAUTH",
+            "OAUTH2",
+            "TOKEN"
+          ]
+        },
+        "access_token_expiry": {
+          "title": "Access token expiry",
+          "type": "integer",
+          "maximum": 9.223372036854776e+18,
+          "minimum": -9.223372036854776e+18,
+          "x-nullable": true
+        },
+        "refresh_token_expiry": {
+          "title": "Refresh token expiry",
+          "type": "integer",
+          "maximum": 9.223372036854776e+18,
+          "minimum": -9.223372036854776e+18,
+          "x-nullable": true
+        }
+      }
+    },
+    "StoreDetail": {
+      "required": [
+        "name",
+        "store_type"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "slug": {
+          "title": "Slug",
+          "type": "string",
+          "format": "slug",
+          "pattern": "^[-a-zA-Z0-9_]+$",
+          "readOnly": true,
+          "minLength": 1
+        },
+        "organization": {
+          "$ref": "#/definitions/OrganizationBase"
+        },
+        "store_status": {
+          "title": "Store status",
+          "type": "string",
+          "enum": [
+            "ACTIVE",
+            "DEACTIVE",
+            "FAILED",
+            "PROCESSING",
+            "OTHER"
+          ]
+        },
+        "store_type": {
+          "title": "Store type",
+          "type": "string",
+          "maxLength": 20,
+          "minLength": 1
+        },
+        "shop_url": {
+          "title": "Shop url",
+          "type": "string",
+          "maxLength": 256
+        },
+        "marketplace": {
+          "title": "Marketplace",
+          "type": "string",
+          "enum": [
+            "AMAZON",
+            "BIG_COMMERCE",
+            "EBAY",
+            "OTTO",
+            "SHEIN",
+            "SHOPIFY",
+            "TEMU",
+            "TIKTOK_SHOP",
+            "WOOCOMMERCE",
+            "OTHER"
+          ]
+        },
+        "country": {
+          "title": "Country",
+          "type": "string",
+          "maxLength": 128
+        },
+        "description": {
+          "title": "Description",
+          "type": "string",
+          "x-nullable": true
+        },
+        "is_authorized": {
+          "title": "Is authorized",
+          "type": "boolean"
+        },
+        "expires_on": {
+          "title": "Expires on",
+          "type": "string",
+          "format": "date-time",
+          "x-nullable": true
+        },
+        "order_sync": {
+          "title": "Order sync",
+          "type": "boolean"
+        },
+        "inventory_sync": {
+          "title": "Inventory sync",
+          "type": "boolean"
+        },
+        "max_stock": {
+          "title": "Max stock",
+          "type": "integer",
+          "maximum": 9.223372036854776e+18,
+          "minimum": 0
+        },
+        "metadata": {
+          "title": "Metadata",
+          "type": "object"
+        },
+        "auth_type": {
+          "title": "Auth type",
+          "type": "string",
+          "enum": [
+            "BASIC",
+            "OAUTH",
+            "OAUTH2",
+            "TOKEN"
+          ]
+        },
+        "access_token_expiry": {
+          "title": "Access token expiry",
+          "type": "integer",
+          "maximum": 9.223372036854776e+18,
+          "minimum": -9.223372036854776e+18,
+          "x-nullable": true
+        },
+        "refresh_token_expiry": {
+          "title": "Refresh token expiry",
+          "type": "integer",
+          "maximum": 9.223372036854776e+18,
+          "minimum": -9.223372036854776e+18,
+          "x-nullable": true
+        },
+        "created_at": {
+          "title": "Created at",
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "updated_at": {
+          "title": "Updated at",
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "access_token": {
+          "title": "Access token",
+          "type": "string",
+          "maxLength": 512
+        },
+        "refresh_token": {
+          "title": "Refresh token",
+          "type": "string",
+          "maxLength": 512
+        },
+        "report_ref": {
+          "title": "Report ref",
+          "type": "object"
+        },
+        "report_sorted_by": {
+          "title": "Report sorted by",
+          "type": "string",
+          "maxLength": 128
+        }
+      }
+    },
+    "WarehouseList": {
+      "required": [
+        "name",
+        "code",
+        "store",
+        "country"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "slug": {
+          "title": "Slug",
+          "type": "string",
+          "format": "slug",
+          "pattern": "^[-a-zA-Z0-9_]+$",
+          "readOnly": true,
+          "minLength": 1
+        },
+        "code": {
+          "title": "Code",
+          "description": "Unique warehouse identifier",
+          "type": "string",
+          "maxLength": 50,
+          "minLength": 1
+        },
+        "store": {
+          "title": "Store",
+          "type": "integer"
+        },
+        "is_primary": {
+          "title": "Is primary",
+          "description": "Set if this is the store's main warehouse",
+          "type": "boolean"
+        },
+        "is_active": {
+          "title": "Is active",
+          "type": "boolean"
+        },
+        "city": {
+          "title": "City",
+          "type": "string",
+          "maxLength": 100
+        },
+        "country": {
+          "title": "Country",
+          "type": "string",
+          "maxLength": 100,
+          "minLength": 1
+        },
+        "address_line1": {
+          "title": "Address line1",
+          "type": "string",
+          "maxLength": 255
+        },
+        "address_line2": {
+          "title": "Address line2",
+          "type": "string",
+          "maxLength": 255
+        },
+        "state": {
+          "title": "State",
+          "type": "string",
+          "maxLength": 100
+        },
+        "postal_code": {
+          "title": "Postal code",
+          "type": "string",
+          "maxLength": 20
+        },
+        "contact_name": {
+          "title": "Contact name",
+          "type": "string",
+          "maxLength": 100
+        },
+        "contact_phone": {
+          "title": "Contact phone",
+          "type": "string",
+          "maxLength": 30
+        },
+        "description": {
+          "title": "Description",
+          "type": "string",
+          "x-nullable": true
+        }
+      }
+    },
+    "UserList": {
+      "required": [
+        "email"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "organization": {
+          "title": "Organization",
+          "type": "integer",
+          "x-nullable": true
+        },
+        "first_name": {
+          "title": "First name",
+          "type": "string",
+          "maxLength": 150
+        },
+        "last_name": {
+          "title": "Last name",
+          "type": "string",
+          "maxLength": 150
+        },
+        "email": {
+          "title": "Email",
+          "type": "string",
+          "format": "email",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "gender": {
+          "title": "Gender",
+          "type": "string",
+          "enum": [
+            "FEMALE",
+            "MALE",
+            "UNKNOWN",
+            "OTHER"
+          ]
+        },
+        "kind": {
+          "title": "Kind",
+          "type": "string",
+          "enum": [
+            "ADMIN",
+            "CLIENT",
+            "DEVELOPER",
+            "MANAGER",
+            "EMPLOYEE",
+            "SUPER_ADMIN",
+            "UNDEFINED"
+          ]
+        },
+        "image": {
+          "title": "Profile Image",
+          "type": "string",
+          "readOnly": true,
+          "x-nullable": true,
+          "format": "uri"
+        }
+      }
+    },
+    "Me": {
+      "required": [
+        "email"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "first_name": {
+          "title": "First name",
+          "type": "string",
+          "maxLength": 150
+        },
+        "last_name": {
+          "title": "Last name",
+          "type": "string",
+          "maxLength": 150
+        },
+        "phone": {
+          "title": "Phone",
+          "type": "string",
+          "maxLength": 20
+        },
+        "email": {
+          "title": "Email",
+          "type": "string",
+          "format": "email",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "gender": {
+          "title": "Gender",
+          "type": "string",
+          "enum": [
+            "FEMALE",
+            "MALE",
+            "UNKNOWN",
+            "OTHER"
+          ]
+        },
+        "image": {
+          "title": "Profile Image",
+          "type": "string",
+          "readOnly": true,
+          "x-nullable": true,
+          "format": "uri"
+        },
+        "created_at": {
+          "title": "Created at",
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "updated_at": {
+          "title": "Updated at",
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        }
+      }
+    },
+    "UserRegistration": {
+      "required": [
+        "email",
+        "password",
+        "confirm_password"
+      ],
+      "type": "object",
+      "properties": {
+        "first_name": {
+          "title": "First name",
+          "type": "string",
+          "maxLength": 150
+        },
+        "last_name": {
+          "title": "Last name",
+          "type": "string",
+          "maxLength": 150
+        },
+        "phone": {
+          "title": "Phone",
+          "type": "string",
+          "maxLength": 20
+        },
+        "email": {
+          "title": "Email",
+          "type": "string",
+          "format": "email",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "gender": {
+          "title": "Gender",
+          "type": "string",
+          "enum": [
+            "FEMALE",
+            "MALE",
+            "UNKNOWN",
+            "OTHER"
+          ]
+        },
+        "image": {
+          "title": "Profile Image",
+          "type": "string",
+          "readOnly": true,
+          "x-nullable": true,
+          "format": "uri"
+        },
+        "password": {
+          "title": "Password",
+          "type": "string",
+          "minLength": 1
+        },
+        "confirm_password": {
+          "title": "Confirm password",
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "UserDetail": {
+      "required": [
+        "email"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "organization": {
+          "$ref": "#/definitions/OrganizationBase"
+        },
+        "first_name": {
+          "title": "First name",
+          "type": "string",
+          "maxLength": 150
+        },
+        "last_name": {
+          "title": "Last name",
+          "type": "string",
+          "maxLength": 150
+        },
+        "email": {
+          "title": "Email",
+          "type": "string",
+          "format": "email",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "gender": {
+          "title": "Gender",
+          "type": "string",
+          "enum": [
+            "FEMALE",
+            "MALE",
+            "UNKNOWN",
+            "OTHER"
+          ]
+        },
+        "kind": {
+          "title": "Kind",
+          "type": "string",
+          "enum": [
+            "ADMIN",
+            "CLIENT",
+            "DEVELOPER",
+            "MANAGER",
+            "EMPLOYEE",
+            "SUPER_ADMIN",
+            "UNDEFINED"
+          ]
+        },
+        "image": {
+          "title": "Profile Image",
+          "type": "string",
+          "readOnly": true,
+          "x-nullable": true,
+          "format": "uri"
+        },
+        "status": {
+          "title": "Status",
+          "type": "string",
+          "enum": [
+            "ACTIVE",
+            "DRAFT",
+            "INACTIVE",
+            "REMOVED",
+            "VERIFIED"
+          ]
+        },
+        "is_staff": {
+          "title": "Is staff",
+          "type": "boolean"
+        }
+      }
+    },
+    "WarehouseDetail": {
+      "required": [
+        "name",
+        "code",
+        "country"
+      ],
+      "type": "object",
+      "properties": {
+        "id": {
+          "title": "ID",
+          "type": "integer",
+          "readOnly": true
+        },
+        "uid": {
+          "title": "Uid",
+          "type": "string",
+          "format": "uuid",
+          "readOnly": true
+        },
+        "name": {
+          "title": "Name",
+          "type": "string",
+          "maxLength": 255,
+          "minLength": 1
+        },
+        "slug": {
+          "title": "Slug",
+          "type": "string",
+          "format": "slug",
+          "pattern": "^[-a-zA-Z0-9_]+$",
+          "readOnly": true,
+          "minLength": 1
+        },
+        "code": {
+          "title": "Code",
+          "description": "Unique warehouse identifier",
+          "type": "string",
+          "maxLength": 50,
+          "minLength": 1
+        },
+        "store": {
+          "$ref": "#/definitions/StoreBase"
+        },
+        "is_primary": {
+          "title": "Is primary",
+          "description": "Set if this is the store's main warehouse",
+          "type": "boolean"
+        },
+        "is_active": {
+          "title": "Is active",
+          "type": "boolean"
+        },
+        "city": {
+          "title": "City",
+          "type": "string",
+          "maxLength": 100
+        },
+        "country": {
+          "title": "Country",
+          "type": "string",
+          "maxLength": 100,
+          "minLength": 1
+        },
+        "address_line1": {
+          "title": "Address line1",
+          "type": "string",
+          "maxLength": 255
+        },
+        "address_line2": {
+          "title": "Address line2",
+          "type": "string",
+          "maxLength": 255
+        },
+        "state": {
+          "title": "State",
+          "type": "string",
+          "maxLength": 100
+        },
+        "postal_code": {
+          "title": "Postal code",
+          "type": "string",
+          "maxLength": 20
+        },
+        "contact_name": {
+          "title": "Contact name",
+          "type": "string",
+          "maxLength": 100
+        },
+        "contact_phone": {
+          "title": "Contact phone",
+          "type": "string",
+          "maxLength": 30
+        },
+        "description": {
+          "title": "Description",
+          "type": "string",
+          "x-nullable": true
+        },
+        "created_at": {
+          "title": "Created at",
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        },
+        "updated_at": {
+          "title": "Updated at",
+          "type": "string",
+          "format": "date-time",
+          "readOnly": true
+        }
+      }
+    }
+  }
+}

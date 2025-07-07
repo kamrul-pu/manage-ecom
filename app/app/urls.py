@@ -43,7 +43,8 @@ if settings.DEBUG:
 
     schema_view = get_schema_view(
         openapi.Info(
-            title="Parser Backend",
+            title="E-COM Manager Backend API",
+            version="1.0.0",
             default_version="1.0",
             description="Test description",
             terms_of_service="https://www.google.com/policies/terms/",

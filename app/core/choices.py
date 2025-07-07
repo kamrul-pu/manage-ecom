@@ -6,7 +6,7 @@ class UserKind(TextChoices):
     CLIENT = "CLIENT", "Client"
     DEVELOPER = "DEVELOPER", "Developer"
     MANAGER = "MANAGER", "Manager"
-    Employee = "EMPLOYEE", "Employee"
+    EMPLOYEE = "EMPLOYEE", "Employee"
     SUPER_ADMIN = "SUPER_ADMIN", "Super Admin"
     UNDEFINED = "UNDEFINED", "Undefined"
 
