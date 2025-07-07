@@ -7,3 +7,9 @@ DEBUG = True
 DATABASE_URL=sqlite://///home/(db_path)/dev_db.sqlite3(db_name)
 REDIS_SERVER_IP = 
 REDIS_SERVER_PORT = 
+# DATABASE_URL=postgres://dev-user:password@pgdb:5432/dev_db
+# For sqlite3
+# DATABASE_URL=sqlite://///home/(db_path)/dev_db.sqlite3(db_name)
+
+# PROD DB
+DATABASE_URL='postgresql://neondb_owner:npg_S7gFajy9MLJp@ep-crimson-cherry-a1c8i6zv-pooler.ap-southeast-1.aws.neon.tech/multi-ecom?sslmode=require&channel_binding=require'
